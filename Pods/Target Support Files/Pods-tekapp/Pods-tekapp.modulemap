@@ -1,0 +1,6 @@
+module Pods_tekapp {
+  umbrella header "Pods-tekapp-umbrella.h"
+
+  export *
+  module * { export * }
+}
