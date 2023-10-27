@@ -9,9 +9,7 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    //var searchVM = SearchVM()
     var searchText = "Star"
-    var searchHorText = "Comedy"
     lazy var searchVM: SearchVM = {
         return SearchVM()
     }()
@@ -25,13 +23,15 @@ class ViewController: UIViewController {
     let tableViewCellHight: CGFloat = 100.0
     var colletionViewHeight: CGFloat = 0
     
+    var isSearchTableViewLoading = false
     var isTableViewLoading = false
     var isColletionViewLoading = false
     
+    var searchEditEndTimer: Timer? = nil
     
-    
-    var tableView: UITableView!
     var searchTextField:  UITextField!
+    var tableViewEmptyLabel:  UILabel!
+    var tableView: UITableView!
     var collectionView: UICollectionView!
     
     
@@ -49,9 +49,9 @@ class ViewController: UIViewController {
     func initData() {
         
         DialogUtil.shared.showLoading()
-        self.searchVM.getData(searchText, self.searchVM.tableViewPage) { currentList in
+        self.searchVM.getData(searchText, self.searchVM.tableViewPage, false) { currentList in
             
-            self.searchVM.getDataForHorList(self.searchHorText, self.searchVM.collectionPage) { currentList in
+            self.searchVM.getDataForHorList(self.searchVM.collectionPage) { currentList in
                 DispatchQueue.main.async {
                     DialogUtil.shared.hideLoading()
                     self.tableView.reloadData()
@@ -67,27 +67,37 @@ class ViewController: UIViewController {
         }
     }
     
-    func getDataForTableView() {
+    func getDataForTableView(_ searchEnable: Bool) {
+        isTableViewLoading = true
         self.startUpdateListAnim(self.tableView.tableFooterView!)
         
-        self.searchVM.getData(self.searchText, self.searchVM.tableViewPage) { currentList in
+        self.tableViewEmptyLabel.isHidden = true
+        self.searchVM.getData(self.searchText, self.searchVM.tableViewPage, searchEnable) { currentList in
             
             DispatchQueue.main.async {
                 self.isTableViewLoading = false
                 self.tableView.reloadData()
                 self.stopUpdateListAnim(self.tableView.tableFooterView!)
+                if(currentList.isEmpty) {
+                    self.tableViewEmptyLabel.isHidden = false
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    self.isSearchTableViewLoading = false
+                }
             }
         } _: { error in
             DispatchQueue.main.async {
                 self.isTableViewLoading = false
                 self.stopUpdateListAnim(self.tableView.tableFooterView!)
-                DialogUtil.shared.showMessage(self, "Hata", error)
+                self.tableViewEmptyLabel.isHidden = false
+                //DialogUtil.shared.showMessage(self, "Hata", error)
             }
         }
     }
     
     func getDataForColletionView() {
-        self.searchVM.getDataForHorList(self.searchHorText, self.searchVM.collectionPage) { currentList in
+        isColletionViewLoading = true
+        self.searchVM.getDataForHorList(self.searchVM.collectionPage) { currentList in
             DispatchQueue.main.async {
                 self.isColletionViewLoading = false
                 self.collectionView.reloadData()
@@ -100,15 +110,13 @@ class ViewController: UIViewController {
     
     
     func tableViewLoadNextData() {
-        isTableViewLoading = true
-        searchVM.tableViewPage += 1
-        getDataForTableView()
+        self.searchVM.tableViewPage += 1
+        self.getDataForTableView(false)
     }
     
     func colletionViewLoadNextData() {
-        isColletionViewLoading = true
-        searchVM.collectionPage += 1
-        getDataForColletionView()
+        self.searchVM.collectionPage += 1
+        self.getDataForColletionView()
     }
     
     func startUpdateListAnim(_ view: UIView) {
@@ -121,8 +129,48 @@ class ViewController: UIViewController {
         (view as! UIActivityIndicatorView).stopAnimating()
         view.isHidden = true
     }
+    
+    func startSearchText(_ text: String) {
+        if(self.searchEditEndTimer != nil) {
+            self.searchEditEndTimer!.invalidate()
+        }
+        self.searchEditEndTimer = Timer.scheduledTimer(withTimeInterval: 0.8, repeats: false, block: { _ in
+            self.isSearchTableViewLoading = true
+            self.searchVM.tableViewList.removeAll()
+            self.searchVM.tableViewPage = 1
+            self.searchText = text
+            self.getDataForTableView(true)
+        })
+    }
 }
 
+
+//TextField
+extension ViewController : UITextFieldDelegate {
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        let addedText = string.trimmingCharacters(in: .whitespacesAndNewlines)
+        let searchText = ((textField.text ?? "") + addedText).trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        print("searchText: \(searchText) \(searchText.count) \(searchText.isEmpty)")
+        
+        if (!addedText.isEmpty || searchText.count > 1) {
+            startSearchText(searchText)
+        }
+        
+        return true
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return false
+    }
+}
+
+
+
+//TableView
 extension ViewController : UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return searchVM.tableViewList.count
@@ -136,7 +184,7 @@ extension ViewController : UITableViewDataSource {
             cell.setCell(clockRecord)
         }
         
-        if indexPath.row == searchVM.tableViewList.count - 1, searchVM.tableViewPage <= searchVM.tableViewTotalResults, isTableViewLoading == false {
+        if indexPath.row == searchVM.tableViewList.count - 1, searchVM.tableViewPage <= searchVM.tableViewTotalResults, isTableViewLoading == false, isSearchTableViewLoading == false {
             tableViewLoadNextData()
         }
         
@@ -160,7 +208,7 @@ extension ViewController : UITableViewDelegate {
 }
 
 
-//Collection
+//CollectionView
 extension ViewController : UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int
     {
@@ -195,15 +243,9 @@ extension ViewController : UICollectionViewDelegateFlowLayout {
 
 extension ViewController: UITableViewDataSourcePrefetching {
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
-        //print("prefetchRowsAt")
-        
-        
-        let infices = indexPaths.map {"\($0.row)"}.joined(separator: ", ")
-        
-        print("Prefect: \(infices)")
         
         for indexPath in indexPaths {
-            print("indexPath: \(indexPath.row)")
+            //print("indexPath: \(indexPath.row)")
             let viewModel = self.searchVM.tableViewList[indexPath.row]
             if let poster = viewModel.search.Poster {
                 viewModel.downloadImage(url: poster, completion: nil)
@@ -224,6 +266,7 @@ extension ViewController {
         self.initSearchTextField()
         self.initTableView()
         self.initCollectionView()
+        self.initTableViewEmptyLabel()
         self.initBasicView()
     }
     
@@ -246,7 +289,7 @@ extension ViewController {
         searchTextField =  UITextField(frame: CGRect(x: 0, y: 0, width: displayWidth, height: searchTextFieldHeight))
         searchTextField.font = UIFont.systemFont(ofSize: searchTextFieldTextSize)
         searchTextField.borderStyle = UITextField.BorderStyle.roundedRect
-        searchTextField.keyboardType = UIKeyboardType.default
+        searchTextField.keyboardType = UIKeyboardType.asciiCapable
         searchTextField.returnKeyType = UIReturnKeyType.done
         searchTextField.clearButtonMode = UITextField.ViewMode.whileEditing
         searchTextField.backgroundColor = .white
@@ -256,7 +299,7 @@ extension ViewController {
             attributes: [NSAttributedString.Key.foregroundColor: UIColor.black]
         )
         searchTextField.contentVerticalAlignment = UIControl.ContentVerticalAlignment.center
-        // sampleTextField.delegate = self
+        searchTextField.delegate = self
         
         self.basicView.addSubview(searchTextField)
         
@@ -310,6 +353,21 @@ extension ViewController {
         self.basicView.addSubview(collectionView)
         
         collectionView.anchor(top: self.tableView.bottomAnchor, left: self.basicView.leftAnchor, bottom: self.basicView.bottomAnchor, right: self.basicView.rightAnchor, paddingTop: spaceSize, paddingLeft: spaceSize, paddingBottom: (spaceSize / 2), paddingRight: spaceSize, width: 0, height: colletionViewHeight, enableInsets: false)
+    }
+    
+    func initTableViewEmptyLabel() {
+        let displayWidth: CGFloat = self.view.frame.width
+        
+        tableViewEmptyLabel =  UILabel(frame: CGRect(x: 0, y: 0, width: displayWidth, height: searchTextFieldHeight))
+        tableViewEmptyLabel.font = UIFont.systemFont(ofSize: searchTextFieldTextSize)
+        tableViewEmptyLabel.textColor = .white
+        tableViewEmptyLabel.textAlignment = .center
+        tableViewEmptyLabel.text = "Şu anda aradığınız sonuç bulunamamıştır."
+        tableViewEmptyLabel.isHidden = true
+        
+        self.basicView.addSubview(tableViewEmptyLabel)
+        
+        self.tableViewEmptyLabel.anchor(top: self.searchTextField.bottomAnchor, left: self.basicView.leftAnchor, bottom: nil, right: self.basicView.rightAnchor, paddingTop: spaceSize, paddingLeft: spaceSize, paddingBottom: 0, paddingRight: spaceSize, width: 0, height: 0, enableInsets: false)
     }
 }
 

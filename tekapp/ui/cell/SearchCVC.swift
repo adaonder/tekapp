@@ -18,7 +18,7 @@ class SearchCVC: UICollectionViewCell {
         imgView.clipsToBounds = true
         return imgView
     }()
-
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -27,7 +27,7 @@ class SearchCVC: UICollectionViewCell {
         addSubview(searchPoster)
         searchPoster.anchor(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0, enableInsets: false)
     }
-
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

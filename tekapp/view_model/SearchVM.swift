@@ -13,7 +13,7 @@ class SearchVM {
     var collectionViewList = [SearchCellVM]()
     
     var defaultSearchText = "Star"
-    var defaultSearchTextHorList = "Comedy"
+    let defaultSearchCollectionText = "Comedy"
     var defaultResponse = "True"
     
     var tableViewPage:Int = 1
@@ -23,10 +23,21 @@ class SearchVM {
     var collectionTotalResults:Int = 0
     
     
-    func getData(_ searchText: String?, _ page: Int , _ success: @escaping ([Search]) -> Void, _ callbackError : @escaping (String) -> Void ) {
-        
-        ApiService.shared.makeRequest(searchText: searchText ?? defaultSearchText, page: page) { (result: ApiResponse<[Search]>) in
+    var oldRequestPath : String? = nil
+    
+    
+    func getData(_ searchText: String, _ page: Int, _ searchEnable: Bool = true, _ success: @escaping ([Search]) -> Void, _ callbackError : @escaping (String) -> Void ) {
+      
+        if searchEnable {
+            if let path = oldRequestPath {
+                ApiService.shared.cancelAllSearchRunningTask(path)
+            }
             
+            oldRequestPath = String.init(format: Parameters.API_URL, searchText, "\(page)")
+        }
+        
+        ApiService.shared.makeRequest(searchText: searchText, page: page) { (result: ApiResponse<[Search]>) in
+            self.oldRequestPath = nil
             if let list = result.Search, result.Response == self.defaultResponse {
                 self.tableViewList.append(contentsOf: list.map({ search in
                     SearchCellVM(search)
@@ -34,18 +45,32 @@ class SearchVM {
                 self.tableViewTotalResults = Int(result.totalResults!) ?? 0
                 success(list)
             } else {
-                callbackError(result.Error ?? "-")
+                if(searchEnable) {
+                    self.tableViewList.removeAll()
+                    self.tableViewTotalResults = 0
+                    success([])
+                } else {
+                    callbackError(result.Error ?? "-")
+                }
             }
             
         } callbackError: { error in
-            callbackError(error ?? "-")
+            self.oldRequestPath = nil
+            if(searchEnable) {
+                self.tableViewList.removeAll()
+                self.tableViewTotalResults = 0
+                success([])
+            } else {
+                callbackError(error ?? "-")
+            }
+            
         }
     }
     
     
-    func getDataForHorList (_ searchText: String?, _ page: Int, _ success: @escaping ([Search]) -> Void, _ callbackError : @escaping (String) -> Void ) {
+    func getDataForHorList (_ page: Int, _ success: @escaping ([Search]) -> Void, _ callbackError : @escaping (String) -> Void ) {
         
-        ApiService.shared.makeRequest(searchText: searchText ?? defaultSearchTextHorList, page: page) { (result: ApiResponse<[Search]>) in
+        ApiService.shared.makeRequest(searchText: defaultSearchCollectionText, page: page) { (result: ApiResponse<[Search]>) in
             
             if let list = result.Search, result.Response == self.defaultResponse {
                 self.collectionViewList.append(contentsOf: list.map({ search in

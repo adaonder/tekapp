@@ -12,7 +12,7 @@ public class ApiService {
     
     
     public func makeRequest<T:Decodable>(searchText: String, page: Int, callbackData: @escaping (ApiResponse<T>) -> Void, callbackError: @escaping (String?) -> Void) {
-        
+        print("make Requeest....")
         let path = String.init(format: Parameters.API_URL, searchText, "\(page)")
         
         print(path)
@@ -56,6 +56,9 @@ public class ApiService {
                     callbackError("Bilinmeyen bir sorun oluştu. Hata: \(error)")
                 }
                 
+            } else {
+                print("Error: Data alınamadı")
+                callbackError("Bilinmeyen bir sorun oluştu. Error: Data alınamadı")
             }
         }.resume()
         
@@ -69,11 +72,29 @@ public class ApiService {
         }
         
         URLSession.shared.dataTask(with: url) { (data, response, error) in
-
+            
             guard let imageData = data else { return }
             completion?(imageData)
         }.resume()
         
+    }
+    
+    
+    func cancelAllSearchRunningTask(_ path: String) {
+        
+        guard let url = URL(string: path) else {
+            return
+        }
+        
+        URLSession.shared.getAllTasks { tasks in
+            tasks
+                .filter { $0.state == .running }
+                .filter {
+                    print("cancel_url: \($0.originalRequest?.url)")
+                    return $0.originalRequest?.url == url
+                }.first?
+                .cancel()
+        }
     }
     
 }
