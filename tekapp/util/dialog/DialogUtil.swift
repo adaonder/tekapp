@@ -5,7 +5,7 @@
 //  Created by Önder Ada on 25.10.2023.
 //
 
-import Foundation
+import UIKit
 
 
 
@@ -23,5 +23,25 @@ public class DialogUtil {
         DispatchQueue.main.async {
             LoadingDialog.hide()
         }
+    }
+    
+    
+    
+    func showMessage(_ view: UIViewController,_ title: String, _ message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Tamam", style: .default, handler: { action in
+            /*switch action.style{
+                case .default:
+                print("default")
+                
+                case .cancel:
+                print("cancel")
+                
+                case .destructive:
+                print("destructive")
+                
+            }*/
+        }))
+        view.present(alert, animated: true, completion: nil)
     }
 }

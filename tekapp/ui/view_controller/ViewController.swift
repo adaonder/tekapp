@@ -17,15 +17,16 @@ class ViewController: UIViewController {
     }()
     
     private let basicView = UIView()
-    private var searchTextFieldTextSize = 15
-    private var searchTextFieldHeight = 50
-    private var searchTextFieldLeftSpace = 20
+    private var searchTextFieldTextSize: CGFloat = 15
+    private var searchTextFieldHeight: CGFloat = 50
+    private var spaceSize: CGFloat = 20
     
     let screenSize: CGRect = UIScreen.main.bounds
-    let leftAndRightPaddings: CGFloat = 80.0
-    let numberOfItemsPerRow: CGFloat = 7.0
+    let tableViewCellHight: CGFloat = 100.0
+    var colletionViewHeight: CGFloat = 0
     
-    
+    var isTableViewLoading = false
+    var isColletionViewLoading = false
     
     
     
@@ -58,34 +59,68 @@ class ViewController: UIViewController {
                 }
             } _: { error in
                 DialogUtil.shared.hideLoading()
+                DialogUtil.shared.showMessage(self, "Hata", error)
             }
         } _: { error in
             DialogUtil.shared.hideLoading()
+            DialogUtil.shared.showMessage(self, "Hata", error)
         }
     }
     
     func getDataForTableView() {
+        self.startUpdateListAnim(self.tableView.tableFooterView!)
         
         self.searchVM.getData(self.searchText, self.searchVM.tableViewPage) { currentList in
+            
             DispatchQueue.main.async {
+                self.isTableViewLoading = false
                 self.tableView.reloadData()
+                self.stopUpdateListAnim(self.tableView.tableFooterView!)
             }
         } _: { error in
-            
+            DispatchQueue.main.async {
+                self.isTableViewLoading = false
+                self.stopUpdateListAnim(self.tableView.tableFooterView!)
+                DialogUtil.shared.showMessage(self, "Hata", error)
+            }
         }
     }
     
     func getDataForColletionView() {
-        
         self.searchVM.getDataForHorList(self.searchHorText, self.searchVM.collectionPage) { currentList in
             DispatchQueue.main.async {
+                self.isColletionViewLoading = false
                 self.collectionView.reloadData()
             }
         } _: { error in
-            
+            self.isColletionViewLoading = false
+            DialogUtil.shared.showMessage(self, "Hata", error)
         }
     }
     
+    
+    func tableViewLoadNextData() {
+        isTableViewLoading = true
+        searchVM.tableViewPage += 1
+        getDataForTableView()
+    }
+    
+    func colletionViewLoadNextData() {
+        isColletionViewLoading = true
+        searchVM.collectionPage += 1
+        getDataForColletionView()
+    }
+    
+    func startUpdateListAnim(_ view: UIView) {
+        view.isHidden = false
+        (view as! UIActivityIndicatorView).startAnimating()
+        
+    }
+    
+    func stopUpdateListAnim(_ view: UIView) {
+        (view as! UIActivityIndicatorView).stopAnimating()
+        view.isHidden = true
+    }
 }
 
 extension ViewController : UITableViewDataSource {
@@ -101,11 +136,15 @@ extension ViewController : UITableViewDataSource {
             cell.setCell(clockRecord)
         }
         
+        if indexPath.row == searchVM.tableViewList.count - 1, searchVM.tableViewPage <= searchVM.tableViewTotalResults, isTableViewLoading == false {
+            tableViewLoadNextData()
+        }
+        
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100.0
+        return tableViewCellHight
     }
 }
 
@@ -136,6 +175,10 @@ extension ViewController : UICollectionViewDataSource {
         if searchVM.collectionViewList.count > indexPath.row {
             let clockRecord = searchVM.collectionViewList[indexPath.row]
             cell.setCell(clockRecord)
+        }
+        
+        if indexPath.row == searchVM.collectionViewList.count - 1, searchVM.collectionPage <= searchVM.collectionTotalResults, isColletionViewLoading == false {
+            self.colletionViewLoadNextData()
         }
         
         return cell
@@ -176,6 +219,8 @@ extension ViewController {
     func initViews() {
         self.view.backgroundColor = .black
         
+        colletionViewHeight = self.view.frame.height / 4
+        
         self.initSearchTextField()
         self.initTableView()
         self.initCollectionView()
@@ -198,8 +243,8 @@ extension ViewController {
     func initSearchTextField() {
         let displayWidth: CGFloat = self.view.frame.width
         
-        searchTextField =  UITextField(frame: CGRect(x: 0, y: 0, width: displayWidth, height: CGFloat(searchTextFieldHeight)))
-        searchTextField.font = UIFont.systemFont(ofSize: CGFloat(searchTextFieldTextSize))
+        searchTextField =  UITextField(frame: CGRect(x: 0, y: 0, width: displayWidth, height: searchTextFieldHeight))
+        searchTextField.font = UIFont.systemFont(ofSize: searchTextFieldTextSize)
         searchTextField.borderStyle = UITextField.BorderStyle.roundedRect
         searchTextField.keyboardType = UIKeyboardType.default
         searchTextField.returnKeyType = UIReturnKeyType.done
@@ -215,37 +260,42 @@ extension ViewController {
         
         self.basicView.addSubview(searchTextField)
         
-        searchTextField.anchor(top: basicView.topAnchor, left: basicView.leftAnchor, bottom: nil, right: basicView.rightAnchor, paddingTop: 20, paddingLeft: 20, paddingBottom: 0, paddingRight: 20, width: 0, height: CGFloat(searchTextFieldHeight), enableInsets: false)
+        searchTextField.anchor(top: basicView.topAnchor, left: basicView.leftAnchor, bottom: nil, right: basicView.rightAnchor, paddingTop: spaceSize, paddingLeft: spaceSize, paddingBottom: 0, paddingRight: spaceSize, width: 0, height: searchTextFieldHeight, enableInsets: false)
     }
     
     func initTableView() {
         let displayWidth: CGFloat = self.view.frame.width
         let displayHeight: CGFloat = self.view.frame.height
+        let tableViewHeight = displayHeight - colletionViewHeight - (2 * spaceSize)
         
-        self.tableView = UITableView(frame: CGRect(x: 0, y: 0, width: displayWidth, height: displayHeight - 300))
+        self.tableView = UITableView(frame: CGRect(x: 0, y: 0, width: displayWidth, height: tableViewHeight))
         self.tableView.register(SearchTVC.self, forCellReuseIdentifier: SearchTVC.id)
         
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.tableView.prefetchDataSource = self
         self.tableView.separatorStyle = .singleLine
-        self.tableView.contentInset.bottom = 10
-        self.tableView.tableFooterView = UIView()
+        //self.tableView.contentInset.bottom = 10
         self.tableView.backgroundColor = .black
         self.tableView.rowHeight = UITableView.automaticDimension
         
+        let spinner = UIActivityIndicatorView(style: .white)
+        spinner.frame = CGRect(x: CGFloat(0), y: CGFloat(0), width: self.tableView.bounds.width, height: CGFloat(50))
+        self.tableView.tableFooterView = spinner
+        
         self.basicView.addSubview(self.tableView)
         
-        self.tableView.anchor(top: self.searchTextField.bottomAnchor, left: self.basicView.leftAnchor, bottom: nil, right: self.basicView.rightAnchor, paddingTop: 20, paddingLeft: 20, paddingBottom: 0, paddingRight: 20, width: 0, height: 0, enableInsets: false)
+        self.tableView.anchor(top: self.searchTextField.bottomAnchor, left: self.basicView.leftAnchor, bottom: nil, right: self.basicView.rightAnchor, paddingTop: spaceSize, paddingLeft: spaceSize, paddingBottom: 0, paddingRight: spaceSize, width: 0, height: 0, enableInsets: false)
         
     }
     
     func initCollectionView() {
         
         let displayWidth: CGFloat = self.view.frame.width
+        let colletionViewWidth = (displayWidth - 40) / 2
         
         let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.itemSize = CGSize(width: (displayWidth - 40) / 2, height: 200)
+        flowLayout.itemSize = CGSize(width: colletionViewWidth, height: colletionViewHeight)
         flowLayout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         flowLayout.scrollDirection = .horizontal
         flowLayout.minimumInteritemSpacing = 0.0
@@ -259,7 +309,7 @@ extension ViewController {
         
         self.basicView.addSubview(collectionView)
         
-        collectionView.anchor(top: self.tableView.bottomAnchor, left: self.basicView.leftAnchor, bottom: self.basicView.bottomAnchor, right: self.basicView.rightAnchor, paddingTop: 20, paddingLeft: 20, paddingBottom: 10, paddingRight: 20, width: 0, height: 200, enableInsets: false)
+        collectionView.anchor(top: self.tableView.bottomAnchor, left: self.basicView.leftAnchor, bottom: self.basicView.bottomAnchor, right: self.basicView.rightAnchor, paddingTop: spaceSize, paddingLeft: spaceSize, paddingBottom: (spaceSize / 2), paddingRight: spaceSize, width: 0, height: colletionViewHeight, enableInsets: false)
     }
 }
 
