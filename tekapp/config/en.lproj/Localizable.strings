@@ -1,0 +1,18 @@
+/* 
+  Localizable.strings
+  tekapp
+
+  Created by Önder Ada on 27.10.2023.
+  
+*/
+
+
+"error" = "Hata";
+"search" = "Ara";
+"ok" = "Tamam";
+"wait_while_loading" = "Lütfen bekleyiniz...";
+"string_to_url_error" = "Url oluşturmada bir hata oldu.";
+"no_search_data" = "Şu anda aradığınız sonuç bulunamamıştır.";
+"api_response_data_empty" = "Bilinmeyen bir sorun oluştu. Error: Data alınamadı";
+"api_response_unknown_error" = "Bilinmeyen bir sorun oluştu. Hata: %@";
+"api_response_server_error" = "İnternet bağlantınızı lütfen kontrol ediniz. Hata Kodu: %@";

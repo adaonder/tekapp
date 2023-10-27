@@ -101,7 +101,7 @@ class DetailViewController: UIViewController {
                     self.updateUIDetailText()
                 }
             } _: { error in
-                print("Test eeror: \(error)")
+                print("Test error: \(error)")
             }
         }
     }

@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		5E5396E9D0FB7769257758F1 /* libPods-tekapp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 788C50C7264C8C1C912D8170 /* libPods-tekapp.a */; };
+		703327062AEC3C580062D971 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 703327082AEC3C580062D971 /* Localizable.strings */; };
+		7033270A2AEC3CA00062D971 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 703327092AEC3CA00062D971 /* String.swift */; };
 		703DA0892AE81F6000E9B97D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 703DA0882AE81F6000E9B97D /* AppDelegate.swift */; };
 		703DA08B2AE81F6000E9B97D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 703DA08A2AE81F6000E9B97D /* SceneDelegate.swift */; };
 		703DA08D2AE81F6000E9B97D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 703DA08C2AE81F6000E9B97D /* ViewController.swift */; };
@@ -34,6 +36,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		703327072AEC3C580062D971 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		703327092AEC3CA00062D971 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		703DA0852AE81F6000E9B97D /* tekapp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = tekapp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		703DA0882AE81F6000E9B97D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		703DA08A2AE81F6000E9B97D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -134,6 +138,7 @@
 				703DA0962AE81F6200E9B97D /* Info.plist */,
 				7080E4182AE95578009F0C55 /* Parameters.swift */,
 				70506E842AEC0E180066A690 /* Dimens.swift */,
+				703327082AEC3C580062D971 /* Localizable.strings */,
 			);
 			path = config;
 			sourceTree = "<group>";
@@ -178,6 +183,7 @@
 				70B65F172AE96E3800A51CEA /* UIScreenEX.swift */,
 				70B65F2A2AEA97D900A51CEA /* UIViewControllerEX.swift */,
 				70B65F282AEA817100A51CEA /* UIView.swift */,
+				703327092AEC3CA00062D971 /* String.swift */,
 			);
 			path = extension;
 			sourceTree = "<group>";
@@ -322,6 +328,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				703DA0952AE81F6200E9B97D /* LaunchScreen.storyboard in Resources */,
+				703327062AEC3C580062D971 /* Localizable.strings in Resources */,
 				703DA0922AE81F6200E9B97D /* Assets.xcassets in Resources */,
 				703DA0902AE81F6000E9B97D /* Main.storyboard in Resources */,
 			);
@@ -377,6 +384,7 @@
 				70B65F2D2AEAA37600A51CEA /* SearchCVC.swift in Sources */,
 				70506E852AEC0E180066A690 /* Dimens.swift in Sources */,
 				7080E4232AE95CC3009F0C55 /* ApiService.swift in Sources */,
+				7033270A2AEC3CA00062D971 /* String.swift in Sources */,
 				70B65F102AE9629C00A51CEA /* HTTPStatusCode.swift in Sources */,
 				7080E4192AE95578009F0C55 /* Parameters.swift in Sources */,
 			);
@@ -385,6 +393,14 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		703327082AEC3C580062D971 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				703327072AEC3C580062D971 /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 		703DA08E2AE81F6000E9B97D /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (

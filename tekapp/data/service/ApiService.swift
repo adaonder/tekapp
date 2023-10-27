@@ -15,7 +15,7 @@ public class ApiService {
         print(path)
         
         guard let url = URL(string: path) else{
-            callbackError("Url oluşturmada bir hata oldu.")
+            callbackError("string_to_url_error".localized())
             return
         }
         
@@ -42,19 +42,17 @@ public class ApiService {
                         
                         break
                     default:
-                        callbackError("İnternet bağlantınızı lütfen kontrol ediniz. Hata Kodu: \(httpStatusCode)")
+                        callbackError(String(format: "api_response_server_error".localized(), "\(httpStatusCode)"))
                         break
                     }
                     
                     
                 } catch(let error) {
-                    print("::error:: \(error)")
-                    callbackError("Bilinmeyen bir sorun oluştu. Hata: \(error)")
+                    callbackError(String(format: "api_response_unknown_error".localized(), "\(error.localizedDescription)"))
                 }
                 
             } else {
-                print("Error: Data alınamadı")
-                callbackError("Bilinmeyen bir sorun oluştu. Error: Data alınamadı")
+                callbackError("api_response_data_empty".localized())
             }
         }.resume()
         

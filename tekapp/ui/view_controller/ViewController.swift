@@ -58,11 +58,11 @@ class ViewController: UIViewController {
                 }
             } _: { error in
                 DialogUtil.shared.hideLoading()
-                DialogUtil.shared.showMessage(self, "Hata", error)
+                DialogUtil.shared.showMessage(self, "error".localized(), error)
             }
         } _: { error in
             DialogUtil.shared.hideLoading()
-            DialogUtil.shared.showMessage(self, "Hata", error)
+            DialogUtil.shared.showMessage(self, "error".localized(), error)
         }
     }
     
@@ -103,7 +103,7 @@ class ViewController: UIViewController {
             }
         } _: { error in
             self.isColletionViewLoading = false
-            DialogUtil.shared.showMessage(self, "Hata", error)
+            DialogUtil.shared.showMessage(self, "error".localized(), error)
         }
     }
     
@@ -290,7 +290,7 @@ extension ViewController {
         searchTextField.backgroundColor = .white
         searchTextField.textColor = .black
         searchTextField.attributedPlaceholder = NSAttributedString(
-            string: "Ara",
+            string: "search".localized(),
             attributes: [NSAttributedString.Key.foregroundColor: UIColor.black]
         )
         searchTextField.contentVerticalAlignment = UIControl.ContentVerticalAlignment.center
@@ -358,7 +358,7 @@ extension ViewController {
         tableViewEmptyLabel.font = UIFont.systemFont(ofSize: searchTextFieldTextSize)
         tableViewEmptyLabel.textColor = .white
         tableViewEmptyLabel.textAlignment = .center
-        tableViewEmptyLabel.text = "Şu anda aradığınız sonuç bulunamamıştır."
+        tableViewEmptyLabel.text = "no_search_data".localized()
         tableViewEmptyLabel.isHidden = true
         
         self.basicView.addSubview(tableViewEmptyLabel)
