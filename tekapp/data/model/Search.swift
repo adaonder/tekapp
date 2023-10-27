@@ -15,11 +15,22 @@ public struct Search : Decodable {
     var Poster: String?
     
     
+    //For Detail
+    var Actors: String?
+    var Plot: String?
+    var Response: String?
+    var Error: String?
+    
+    
     public enum CodingKeys: String, CodingKey{
         case Title
         case Year
         case imdbID
         case `Type`
         case Poster
+        case Actors
+        case Plot
+        case Response
+        case Error
     }
 }

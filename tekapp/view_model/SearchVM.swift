@@ -14,7 +14,6 @@ class SearchVM {
     
     var defaultSearchText = "Star"
     let defaultSearchCollectionText = "Comedy"
-    var defaultResponse = "True"
     
     var tableViewPage:Int = 1
     var tableViewTotalResults:Int = 0
@@ -28,17 +27,20 @@ class SearchVM {
     
     func getData(_ searchText: String, _ page: Int, _ searchEnable: Bool = true, _ success: @escaping ([Search]) -> Void, _ callbackError : @escaping (String) -> Void ) {
       
+        let path = Parameters.API_URL + String.init(format: Parameters.API_ENDPOINT_SEARCH, searchText, "\(page)")
+        
         if searchEnable {
             if let path = oldRequestPath {
                 ApiService.shared.cancelAllSearchRunningTask(path)
             }
             
-            oldRequestPath = String.init(format: Parameters.API_URL, searchText, "\(page)")
+            oldRequestPath = path
         }
         
-        ApiService.shared.makeRequest(searchText: searchText, page: page) { (result: ApiResponse<[Search]>) in
+        
+        ApiService.shared.makeRequest(path: path) { (result: ApiResponse<[Search]>) in
             self.oldRequestPath = nil
-            if let list = result.Search, result.Response == self.defaultResponse {
+            if let list = result.Search, result.Response == Parameters.responseSuccess {
                 self.tableViewList.append(contentsOf: list.map({ search in
                     SearchCellVM(search)
                 }))
@@ -70,9 +72,11 @@ class SearchVM {
     
     func getDataForHorList (_ page: Int, _ success: @escaping ([Search]) -> Void, _ callbackError : @escaping (String) -> Void ) {
         
-        ApiService.shared.makeRequest(searchText: defaultSearchCollectionText, page: page) { (result: ApiResponse<[Search]>) in
+        let path = Parameters.API_URL + String.init(format: Parameters.API_ENDPOINT_SEARCH, defaultSearchCollectionText, "\(page)")
+        
+        ApiService.shared.makeRequest(path: path) { (result: ApiResponse<[Search]>) in
             
-            if let list = result.Search, result.Response == self.defaultResponse {
+            if let list = result.Search, result.Response == Parameters.responseSuccess {
                 self.collectionViewList.append(contentsOf: list.map({ search in
                     SearchCellVM(search)
                 }))

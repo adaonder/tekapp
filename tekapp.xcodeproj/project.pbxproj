@@ -14,6 +14,9 @@
 		703DA0902AE81F6000E9B97D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 703DA08E2AE81F6000E9B97D /* Main.storyboard */; };
 		703DA0922AE81F6200E9B97D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 703DA0912AE81F6200E9B97D /* Assets.xcassets */; };
 		703DA0952AE81F6200E9B97D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 703DA0932AE81F6200E9B97D /* LaunchScreen.storyboard */; };
+		70506E832AEBFB6E0066A690 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70506E822AEBFB6E0066A690 /* DetailViewController.swift */; };
+		70506E852AEC0E180066A690 /* Dimens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70506E842AEC0E180066A690 /* Dimens.swift */; };
+		70506E872AEC13980066A690 /* SearchDetailVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70506E862AEC13980066A690 /* SearchDetailVM.swift */; };
 		7080E4192AE95578009F0C55 /* Parameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7080E4182AE95578009F0C55 /* Parameters.swift */; };
 		7080E41B2AE95832009F0C55 /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7080E41A2AE95832009F0C55 /* Search.swift */; };
 		7080E41E2AE95B8C009F0C55 /* ApiResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7080E41D2AE95B8C009F0C55 /* ApiResponse.swift */; };
@@ -39,6 +42,9 @@
 		703DA0912AE81F6200E9B97D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		703DA0942AE81F6200E9B97D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		703DA0962AE81F6200E9B97D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		70506E822AEBFB6E0066A690 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		70506E842AEC0E180066A690 /* Dimens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dimens.swift; sourceTree = "<group>"; };
+		70506E862AEC13980066A690 /* SearchDetailVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDetailVM.swift; sourceTree = "<group>"; };
 		7080E4182AE95578009F0C55 /* Parameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parameters.swift; sourceTree = "<group>"; };
 		7080E41A2AE95832009F0C55 /* Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Search.swift; sourceTree = "<group>"; };
 		7080E41D2AE95B8C009F0C55 /* ApiResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiResponse.swift; sourceTree = "<group>"; };
@@ -116,6 +122,7 @@
 			isa = PBXGroup;
 			children = (
 				70B65F1C2AEA4FDB00A51CEA /* SearchVM.swift */,
+				70506E862AEC13980066A690 /* SearchDetailVM.swift */,
 				70DF91672AEB0E0F00509B95 /* SearchCellVM.swift */,
 			);
 			path = view_model;
@@ -126,6 +133,7 @@
 			children = (
 				703DA0962AE81F6200E9B97D /* Info.plist */,
 				7080E4182AE95578009F0C55 /* Parameters.swift */,
+				70506E842AEC0E180066A690 /* Dimens.swift */,
 			);
 			path = config;
 			sourceTree = "<group>";
@@ -223,6 +231,7 @@
 			isa = PBXGroup;
 			children = (
 				703DA08C2AE81F6000E9B97D /* ViewController.swift */,
+				70506E822AEBFB6E0066A690 /* DetailViewController.swift */,
 			);
 			path = view_controller;
 			sourceTree = "<group>";
@@ -353,17 +362,20 @@
 				70B65F2B2AEA97D900A51CEA /* UIViewControllerEX.swift in Sources */,
 				703DA08D2AE81F6000E9B97D /* ViewController.swift in Sources */,
 				70B65F132AE96D2C00A51CEA /* DialogUtil.swift in Sources */,
+				70506E872AEC13980066A690 /* SearchDetailVM.swift in Sources */,
 				70B65F272AEA55CA00A51CEA /* SearchTVC.swift in Sources */,
 				70B65F182AE96E3800A51CEA /* UIScreenEX.swift in Sources */,
 				70DF91682AEB0E0F00509B95 /* SearchCellVM.swift in Sources */,
 				703DA0892AE81F6000E9B97D /* AppDelegate.swift in Sources */,
 				7080E41B2AE95832009F0C55 /* Search.swift in Sources */,
 				7080E41E2AE95B8C009F0C55 /* ApiResponse.swift in Sources */,
+				70506E832AEBFB6E0066A690 /* DetailViewController.swift in Sources */,
 				70B65F1D2AEA4FDB00A51CEA /* SearchVM.swift in Sources */,
 				703DA08B2AE81F6000E9B97D /* SceneDelegate.swift in Sources */,
 				70B65F152AE96D9D00A51CEA /* LoadingDialog.swift in Sources */,
 				70B65F292AEA817100A51CEA /* UIView.swift in Sources */,
 				70B65F2D2AEAA37600A51CEA /* SearchCVC.swift in Sources */,
+				70506E852AEC0E180066A690 /* Dimens.swift in Sources */,
 				7080E4232AE95CC3009F0C55 /* ApiService.swift in Sources */,
 				70B65F102AE9629C00A51CEA /* HTTPStatusCode.swift in Sources */,
 				7080E4192AE95578009F0C55 /* Parameters.swift in Sources */,

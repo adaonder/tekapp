@@ -12,7 +12,7 @@ class SearchTVC: UITableViewCell {
     
     public static var id = "SearchTVC"
     
-    
+
     
     private let searchPoster : UIImageView = {
         let imgView = UIImageView()
@@ -24,7 +24,7 @@ class SearchTVC: UITableViewCell {
     private let searchTitle : UILabel = {
         let lbl = UILabel()
         lbl.textColor = .white
-        lbl.font = UIFont.boldSystemFont(ofSize: 16)
+        lbl.font = UIFont.boldSystemFont(ofSize: Dimens.shared.textSizeHeader)
         lbl.textAlignment = .left
         return lbl
     }()
@@ -32,7 +32,7 @@ class SearchTVC: UITableViewCell {
     private let searchYear : UILabel = {
         let lbl = UILabel()
         lbl.textColor = .white
-        lbl.font = UIFont.systemFont(ofSize: 16)
+        lbl.font = UIFont.systemFont(ofSize: Dimens.shared.textSizeTitle)
         lbl.textAlignment = .left
         lbl.numberOfLines = 0
         return lbl
@@ -48,9 +48,9 @@ class SearchTVC: UITableViewCell {
         addSubview(searchTitle)
         addSubview(searchYear)
         
-        searchPoster.anchor(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: nil, paddingTop: 5, paddingLeft: 5, paddingBottom: 5, paddingRight: 0, width: 90, height: 0, enableInsets: false)
-        searchTitle.anchor(top: topAnchor, left: searchPoster.rightAnchor, bottom: nil, right: nil, paddingTop: 20, paddingLeft: 10, paddingBottom: 0, paddingRight: 0, width: frame.size.width / 2, height: 0, enableInsets: false)
-        searchYear.anchor(top: searchTitle.bottomAnchor, left: searchPoster.rightAnchor, bottom: nil, right: nil, paddingTop: 0, paddingLeft: 10, paddingBottom: 0, paddingRight: 0, width: frame.size.width / 2, height: 0, enableInsets: false)
+        searchPoster.anchor(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: nil, paddingTop: Dimens.shared.spaceSmall, paddingLeft:  0, paddingBottom:  Dimens.shared.spaceSmall, paddingRight: 0, width: 90, height: 0, enableInsets: false)
+        searchTitle.anchor(top: topAnchor, left: searchPoster.rightAnchor, bottom: nil, right: rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0, enableInsets: false)
+        searchYear.anchor(top: searchTitle.bottomAnchor, left: searchPoster.rightAnchor, bottom: nil, right: nil, paddingTop: Dimens.shared.spaceNormal, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0, enableInsets: false)
         
     }
     

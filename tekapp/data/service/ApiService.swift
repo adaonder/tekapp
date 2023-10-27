@@ -11,10 +11,7 @@ public class ApiService {
     public static var shared = ApiService()
     
     
-    public func makeRequest<T:Decodable>(searchText: String, page: Int, callbackData: @escaping (ApiResponse<T>) -> Void, callbackError: @escaping (String?) -> Void) {
-        print("make Requeest....")
-        let path = String.init(format: Parameters.API_URL, searchText, "\(page)")
-        
+    public func makeRequest<T:Decodable>(path: String, callbackData: @escaping (T) -> Void, callbackError: @escaping (String?) -> Void) {
         print(path)
         
         guard let url = URL(string: path) else{
@@ -40,8 +37,7 @@ public class ApiService {
                     switch httpStatusCode {
                     case HTTPStatusCode.ok.rawValue:
                         
-                        let currentApiResponse = try JSONDecoder().decode(ApiResponse<T>.self, from: data)
-                        
+                        let currentApiResponse = try JSONDecoder().decode(T.self, from: data)
                         callbackData(currentApiResponse)
                         
                         break
@@ -89,10 +85,7 @@ public class ApiService {
         URLSession.shared.getAllTasks { tasks in
             tasks
                 .filter { $0.state == .running }
-                .filter {
-                    print("cancel_url: \($0.originalRequest?.url)")
-                    return $0.originalRequest?.url == url
-                }.first?
+                .filter {$0.originalRequest?.url == url}.first?
                 .cancel()
         }
     }

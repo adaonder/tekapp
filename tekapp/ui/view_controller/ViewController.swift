@@ -17,7 +17,6 @@ class ViewController: UIViewController {
     private let basicView = UIView()
     private var searchTextFieldTextSize: CGFloat = 15
     private var searchTextFieldHeight: CGFloat = 50
-    private var spaceSize: CGFloat = 20
     
     let screenSize: CGRect = UIScreen.main.bounds
     let tableViewCellHight: CGFloat = 100.0
@@ -52,7 +51,7 @@ class ViewController: UIViewController {
         self.searchVM.getData(searchText, self.searchVM.tableViewPage, false) { currentList in
             
             self.searchVM.getDataForHorList(self.searchVM.collectionPage) { currentList in
-                DispatchQueue.main.async {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                     DialogUtil.shared.hideLoading()
                     self.tableView.reloadData()
                     self.collectionView.reloadData()
@@ -153,8 +152,6 @@ extension ViewController : UITextFieldDelegate {
         let addedText = string.trimmingCharacters(in: .whitespacesAndNewlines)
         let searchText = ((textField.text ?? "") + addedText).trimmingCharacters(in: .whitespacesAndNewlines)
         
-        print("searchText: \(searchText) \(searchText.count) \(searchText.isEmpty)")
-        
         if (!addedText.isEmpty || searchText.count > 1) {
             startSearchText(searchText)
         }
@@ -200,10 +197,8 @@ extension ViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        let clockRecord = self.searchVM.tableViewList[indexPath.row]
-        print("Title: \(clockRecord.search.Title)")
-        print("imdbID: \(clockRecord.search.imdbID)")
-        
+        let cellVM = self.searchVM.tableViewList[indexPath.row]
+        self.present(DetailViewController.newIntance(cellVM), animated: true, completion: nil)
     }
 }
 
@@ -295,7 +290,7 @@ extension ViewController {
         searchTextField.backgroundColor = .white
         searchTextField.textColor = .black
         searchTextField.attributedPlaceholder = NSAttributedString(
-            string: "Search",
+            string: "Ara",
             attributes: [NSAttributedString.Key.foregroundColor: UIColor.black]
         )
         searchTextField.contentVerticalAlignment = UIControl.ContentVerticalAlignment.center
@@ -303,13 +298,13 @@ extension ViewController {
         
         self.basicView.addSubview(searchTextField)
         
-        searchTextField.anchor(top: basicView.topAnchor, left: basicView.leftAnchor, bottom: nil, right: basicView.rightAnchor, paddingTop: spaceSize, paddingLeft: spaceSize, paddingBottom: 0, paddingRight: spaceSize, width: 0, height: searchTextFieldHeight, enableInsets: false)
+        searchTextField.anchor(top: basicView.topAnchor, left: basicView.leftAnchor, bottom: nil, right: basicView.rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: Dimens.shared.spaceNormal, paddingBottom: 0, paddingRight: Dimens.shared.spaceNormal, width: 0, height: searchTextFieldHeight, enableInsets: false)
     }
     
     func initTableView() {
         let displayWidth: CGFloat = self.view.frame.width
         let displayHeight: CGFloat = self.view.frame.height
-        let tableViewHeight = displayHeight - colletionViewHeight - (2 * spaceSize)
+        let tableViewHeight = displayHeight - colletionViewHeight - (2 * Dimens.shared.spaceNormal)
         
         self.tableView = UITableView(frame: CGRect(x: 0, y: 0, width: displayWidth, height: tableViewHeight))
         self.tableView.register(SearchTVC.self, forCellReuseIdentifier: SearchTVC.id)
@@ -328,14 +323,14 @@ extension ViewController {
         
         self.basicView.addSubview(self.tableView)
         
-        self.tableView.anchor(top: self.searchTextField.bottomAnchor, left: self.basicView.leftAnchor, bottom: nil, right: self.basicView.rightAnchor, paddingTop: spaceSize, paddingLeft: spaceSize, paddingBottom: 0, paddingRight: spaceSize, width: 0, height: 0, enableInsets: false)
+        self.tableView.anchor(top: self.searchTextField.bottomAnchor, left: self.basicView.leftAnchor, bottom: nil, right: self.basicView.rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: Dimens.shared.spaceNormal, paddingBottom: 0, paddingRight: Dimens.shared.spaceNormal, width: 0, height: 0, enableInsets: false)
         
     }
     
     func initCollectionView() {
         
         let displayWidth: CGFloat = self.view.frame.width
-        let colletionViewWidth = (displayWidth - 40) / 2
+        let colletionViewWidth = displayWidth / 1.6
         
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.itemSize = CGSize(width: colletionViewWidth, height: colletionViewHeight)
@@ -349,10 +344,11 @@ extension ViewController {
         collectionView.dataSource = self
         collectionView.backgroundColor = UIColor.black
         collectionView.isPagingEnabled = false
+        collectionView.addViewBorder(borderColor: UIColor.gray.cgColor, borderWith: 1, borderCornerRadius: 0)
         
         self.basicView.addSubview(collectionView)
         
-        collectionView.anchor(top: self.tableView.bottomAnchor, left: self.basicView.leftAnchor, bottom: self.basicView.bottomAnchor, right: self.basicView.rightAnchor, paddingTop: spaceSize, paddingLeft: spaceSize, paddingBottom: (spaceSize / 2), paddingRight: spaceSize, width: 0, height: colletionViewHeight, enableInsets: false)
+        collectionView.anchor(top: self.tableView.bottomAnchor, left: self.basicView.leftAnchor, bottom: self.basicView.bottomAnchor, right: self.basicView.rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: 0, paddingBottom: (Dimens.shared.spaceNormal / 2), paddingRight: 0, width: 0, height: colletionViewHeight, enableInsets: false)
     }
     
     func initTableViewEmptyLabel() {
@@ -367,7 +363,7 @@ extension ViewController {
         
         self.basicView.addSubview(tableViewEmptyLabel)
         
-        self.tableViewEmptyLabel.anchor(top: self.searchTextField.bottomAnchor, left: self.basicView.leftAnchor, bottom: nil, right: self.basicView.rightAnchor, paddingTop: spaceSize, paddingLeft: spaceSize, paddingBottom: 0, paddingRight: spaceSize, width: 0, height: 0, enableInsets: false)
+        self.tableViewEmptyLabel.anchor(top: self.searchTextField.bottomAnchor, left: self.basicView.leftAnchor, bottom: nil, right: self.basicView.rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: Dimens.shared.spaceNormal, paddingBottom: 0, paddingRight: Dimens.shared.spaceNormal, width: 0, height: 0, enableInsets: false)
     }
 }
 
