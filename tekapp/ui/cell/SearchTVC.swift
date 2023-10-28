@@ -71,7 +71,7 @@ class SearchTVC: UITableViewCell {
                 }
             }
         } else {
-            searchPoster.image = UIImage(named: "avatar")
+            searchPoster.image = UIImage(named: Images.shared.avatar)
         }
         
     }

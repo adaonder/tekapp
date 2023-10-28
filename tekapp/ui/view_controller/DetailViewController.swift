@@ -8,13 +8,23 @@
 import UIKit
 
 
-class DetailViewController: UIViewController {
+class DetailViewController: BaseVC {
     
     var searchCellVM: SearchCellVM!
     var searchDetail: Search? = nil
     
     lazy var searchDetailVM: SearchDetailVM = {
         return SearchDetailVM()
+    }()
+    
+    
+    private let backImageView: UIImageView = {
+        let imgView = UIImageView(image: UIImage(named: Images.shared.leftArrow))
+        imgView.contentMode = .scaleAspectFit
+        imgView.clipsToBounds = true
+        imgView.isUserInteractionEnabled = true
+        imgView.setImageColor(color: .white)
+        return imgView
     }()
     
     private let searchPoster : UIImageView = {
@@ -42,57 +52,23 @@ class DetailViewController: UIViewController {
     }()
     
     static func newIntance (_ searchCellVM: SearchCellVM) -> DetailViewController {
-        let vc = tekapp.DetailViewController()
+        let vc = DetailViewController()
         vc.searchCellVM = searchCellVM
+        vc.modalPresentationStyle = .fullScreen
         return vc
     }
     
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
+    override func initViews() {
         addViews()
         setConstraints()
         updateUI()
-        getData()
-    }
-    
-    func addViews() {
-        self.view.backgroundColor = .black
-        self.view.addSubview(searchPoster)
-        self.view.addSubview(searchTitle)
-        self.view.addSubview(searchPlot)
-    }
-    
-    func setConstraints() {
-        let displayHeight: CGFloat = self.view.frame.height
         
-        searchPoster.anchor(top: self.view.topAnchor, left: self.view.leftAnchor, bottom: nil, right: self.view.rightAnchor, paddingTop: 0, paddingLeft: Dimens.shared.spaceNormal, paddingBottom: 0, paddingRight: Dimens.shared.spaceNormal, width: 0, height: displayHeight / 4, enableInsets: false)
-        searchTitle.anchor(top: self.searchPoster.bottomAnchor, left: self.view.leftAnchor, bottom: nil, right: self.view.rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: Dimens.shared.spaceNormal, paddingBottom: 0, paddingRight: Dimens.shared.spaceNormal, width: 0, height: 0, enableInsets: false)
-        searchPlot.anchor(top: self.searchTitle.bottomAnchor, left: self.view.leftAnchor, bottom: nil, right: self.view.rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: Dimens.shared.spaceNormal, paddingBottom: 0, paddingRight: Dimens.shared.spaceNormal, width: 0, height: 0, enableInsets: false)
-    }
-    
-    func updateUI() {
-        if let poster = searchCellVM.search.Poster {
-            
-            self.searchCellVM.downloadImage(url: poster) { [weak self] image in
-                DispatchQueue.main.async {
-                    self?.searchPoster.image = image
-                }
-            }
-        } else {
-            searchPoster.image = UIImage(named: "avatar")
-        }
-        
-        searchTitle.text = searchCellVM.search.Title ?? "-"
-    }
-    
-    func updateUIDetailText() {
-        self.searchPlot.text = searchDetail?.Plot ?? "-"
+        backImageView.setOnClickListener(self, #selector(backButton))
     }
     
     
-    func getData() {
+    override func initData() {
         if let id = searchCellVM.search.imdbID {
             searchDetailVM.getData(id) { result in
                 print("Test 1")
@@ -106,4 +82,43 @@ class DetailViewController: UIViewController {
         }
     }
     
+    
+    func addViews() {
+        self.baseView.addSubview(backImageView)
+        self.baseView.addSubview(searchPoster)
+        self.baseView.addSubview(searchTitle)
+        self.baseView.addSubview(searchPlot)
+    }
+    
+    func setConstraints() {
+        let displayHeight: CGFloat = self.view.frame.height
+        
+        backImageView.anchor(top: self.baseView.topAnchor, left: self.baseView.leftAnchor, bottom: nil, right: nil, paddingTop: Dimens.shared.spaceSmall, paddingLeft: Dimens.shared.spaceNormal, paddingBottom: 0, paddingRight: 0, width: Dimens.shared.iconSizeBack, height: Dimens.shared.iconSizeBack, enableInsets: false)
+        searchPoster.anchor(top: self.backImageView.bottomAnchor, left: self.baseView.leftAnchor, bottom: nil, right: self.baseView.rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: Dimens.shared.spaceNormal, paddingBottom: 0, paddingRight: Dimens.shared.spaceNormal, width: 0, height: displayHeight / 4, enableInsets: false)
+        searchTitle.anchor(top: self.searchPoster.bottomAnchor, left: self.baseView.leftAnchor, bottom: nil, right: self.baseView.rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: Dimens.shared.spaceNormal, paddingBottom: 0, paddingRight: Dimens.shared.spaceNormal, width: 0, height: 0, enableInsets: false)
+        searchPlot.anchor(top: self.searchTitle.bottomAnchor, left: self.baseView.leftAnchor, bottom: nil, right: self.baseView.rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: Dimens.shared.spaceNormal, paddingBottom: 0, paddingRight: Dimens.shared.spaceNormal, width: 0, height: 0, enableInsets: false)
+    }
+    
+    func updateUI() {
+        if let poster = searchCellVM.search.Poster {
+            
+            self.searchCellVM.downloadImage(url: poster) { [weak self] image in
+                DispatchQueue.main.async {
+                    self?.searchPoster.image = image
+                }
+            }
+        } else {
+            searchPoster.image = UIImage(named: Images.shared.avatar)
+        }
+        
+        searchTitle.text = searchCellVM.search.Title ?? "-"
+    }
+    
+    func updateUIDetailText() {
+        self.searchPlot.text = searchDetail?.Plot ?? "-"
+    }
+    
+    @objc func backButton() {
+        self.dismiss(animated: true)
+    }
 }

@@ -10,6 +10,7 @@
 "error" = "Hata";
 "search" = "Ara";
 "ok" = "Tamam";
+"back" = "Geri";
 "wait_while_loading" = "Lütfen bekleyiniz...";
 "string_to_url_error" = "Url oluşturmada bir hata oldu.";
 "no_search_data" = "Şu anda aradığınız sonuç bulunamamıştır.";

@@ -49,4 +49,10 @@ extension UIView {
         self.layer.borderColor = borderColor
         self.layer.cornerRadius = borderCornerRadius
     }
+    
+    func setOnClickListener(_ vc: UIViewController, _ selector: Selector) {
+        vc.view.endEditing(true)
+        self.isUserInteractionEnabled = true
+        self.addGestureRecognizer(UITapGestureRecognizer(target: vc, action: selector))
+    }
 }

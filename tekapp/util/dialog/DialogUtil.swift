@@ -15,7 +15,7 @@ public class DialogUtil {
     //MARK: Progress
     func showLoading() {
         DispatchQueue.main.async {
-            LoadingDialog.show("wait_while_loading", disableUI: true)
+            LoadingDialog.show("wait_while_loading".localized(), disableUI: true)
         }
     }
     
@@ -29,19 +29,7 @@ public class DialogUtil {
     
     func showMessage(_ view: UIViewController,_ title: String, _ message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "ok".localized(), style: .default, handler: { action in
-            /*switch action.style{
-                case .default:
-                print("default")
-                
-                case .cancel:
-                print("cancel")
-                
-                case .destructive:
-                print("destructive")
-                
-            }*/
-        }))
+        alert.addAction(UIAlertAction(title: "ok".localized(), style: .default, handler: nil))
         view.present(alert, animated: true, completion: nil)
     }
 }

@@ -47,7 +47,7 @@ class SearchCVC: UICollectionViewCell {
                 }
             }
         } else {
-            searchPoster.image = UIImage(named: "avatar")
+            searchPoster.image = UIImage(named: Images.shared.avatar)
         }
         
     }

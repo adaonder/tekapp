@@ -7,14 +7,14 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: BaseVC {
     
     var searchText = "Star"
     lazy var searchVM: SearchVM = {
         return SearchVM()
     }()
     
-    private let basicView = UIView()
+    
     private var searchTextFieldTextSize: CGFloat = 15
     private var searchTextFieldHeight: CGFloat = 50
     
@@ -34,19 +34,21 @@ class ViewController: UIViewController {
     var collectionView: UICollectionView!
     
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        print("viewDidLoad")
+    
+    override func initViews() {
+        self.colletionViewHeight = self.view.frame.height / 4
         
-        self.hideKeyboardWhenTappedAround()
-        self.initViews()
-        self.initData()
+        self.initSearchTextField()
+        self.initTableView()
+        self.initCollectionView()
+        self.initTableViewEmptyLabel()
+        
+        self.addViews()
+        self.configureConstraint()
     }
     
     
-    
-    func initData() {
-        
+    override func initData() {
         DialogUtil.shared.showLoading()
         self.searchVM.getData(searchText, self.searchVM.tableViewPage, false) { currentList in
             
@@ -89,7 +91,7 @@ class ViewController: UIViewController {
                 self.isTableViewLoading = false
                 self.stopUpdateListAnim(self.tableView.tableFooterView!)
                 self.tableViewEmptyLabel.isHidden = false
-                //DialogUtil.shared.showMessage(self, "Hata", error)
+                //DialogUtil.shared.showMessage(self, "error".localized(), error)
             }
         }
     }
@@ -252,32 +254,6 @@ extension ViewController: UITableViewDataSourcePrefetching {
 
 extension ViewController {
     
-    
-    func initViews() {
-        self.view.backgroundColor = .black
-        
-        colletionViewHeight = self.view.frame.height / 4
-        
-        self.initSearchTextField()
-        self.initTableView()
-        self.initCollectionView()
-        self.initTableViewEmptyLabel()
-        self.initBasicView()
-    }
-    
-    func initBasicView() {
-        self.view.addSubview(self.basicView)
-        
-        self.basicView.backgroundColor = .black
-        self.basicView.translatesAutoresizingMaskIntoConstraints = false
-        let guide = self.view.safeAreaLayoutGuide
-        self.basicView.trailingAnchor.constraint(equalTo: guide.trailingAnchor).isActive = true
-        self.basicView.leadingAnchor.constraint(equalTo: guide.leadingAnchor).isActive = true
-        self.basicView.topAnchor.constraint(equalTo: guide.topAnchor).isActive = true
-        self.basicView.bottomAnchor.constraint(equalTo: guide.bottomAnchor).isActive = true
-    }
-    
-    
     func initSearchTextField() {
         let displayWidth: CGFloat = self.view.frame.width
         
@@ -295,10 +271,6 @@ extension ViewController {
         )
         searchTextField.contentVerticalAlignment = UIControl.ContentVerticalAlignment.center
         searchTextField.delegate = self
-        
-        self.basicView.addSubview(searchTextField)
-        
-        searchTextField.anchor(top: basicView.topAnchor, left: basicView.leftAnchor, bottom: nil, right: basicView.rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: Dimens.shared.spaceNormal, paddingBottom: 0, paddingRight: Dimens.shared.spaceNormal, width: 0, height: searchTextFieldHeight, enableInsets: false)
     }
     
     func initTableView() {
@@ -320,11 +292,6 @@ extension ViewController {
         let spinner = UIActivityIndicatorView(style: .white)
         spinner.frame = CGRect(x: CGFloat(0), y: CGFloat(0), width: self.tableView.bounds.width, height: CGFloat(50))
         self.tableView.tableFooterView = spinner
-        
-        self.basicView.addSubview(self.tableView)
-        
-        self.tableView.anchor(top: self.searchTextField.bottomAnchor, left: self.basicView.leftAnchor, bottom: nil, right: self.basicView.rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: Dimens.shared.spaceNormal, paddingBottom: 0, paddingRight: Dimens.shared.spaceNormal, width: 0, height: 0, enableInsets: false)
-        
     }
     
     func initCollectionView() {
@@ -345,10 +312,6 @@ extension ViewController {
         collectionView.backgroundColor = UIColor.black
         collectionView.isPagingEnabled = false
         collectionView.addViewBorder(borderColor: UIColor.gray.cgColor, borderWith: 1, borderCornerRadius: 0)
-        
-        self.basicView.addSubview(collectionView)
-        
-        collectionView.anchor(top: self.tableView.bottomAnchor, left: self.basicView.leftAnchor, bottom: self.basicView.bottomAnchor, right: self.basicView.rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: 0, paddingBottom: (Dimens.shared.spaceNormal / 2), paddingRight: 0, width: 0, height: colletionViewHeight, enableInsets: false)
     }
     
     func initTableViewEmptyLabel() {
@@ -360,12 +323,20 @@ extension ViewController {
         tableViewEmptyLabel.textAlignment = .center
         tableViewEmptyLabel.text = "no_search_data".localized()
         tableViewEmptyLabel.isHidden = true
-        
-        self.basicView.addSubview(tableViewEmptyLabel)
-        
-        self.tableViewEmptyLabel.anchor(top: self.searchTextField.bottomAnchor, left: self.basicView.leftAnchor, bottom: nil, right: self.basicView.rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: Dimens.shared.spaceNormal, paddingBottom: 0, paddingRight: Dimens.shared.spaceNormal, width: 0, height: 0, enableInsets: false)
+    }
+    
+    func addViews() {
+        self.baseView.addSubview(self.searchTextField)
+        self.baseView.addSubview(self.tableView)
+        self.baseView.addSubview(self.collectionView)
+        self.baseView.addSubview(self.tableViewEmptyLabel)
+    }
+    
+    
+    func configureConstraint() {
+        self.searchTextField.anchor(top: baseView.topAnchor, left: baseView.leftAnchor, bottom: nil, right: baseView.rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: Dimens.shared.spaceNormal, paddingBottom: 0, paddingRight: Dimens.shared.spaceNormal, width: 0, height: searchTextFieldHeight, enableInsets: false)
+        self.tableView.anchor(top: self.searchTextField.bottomAnchor, left: self.baseView.leftAnchor, bottom: nil, right: self.baseView.rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: Dimens.shared.spaceNormal, paddingBottom: 0, paddingRight: Dimens.shared.spaceNormal, width: 0, height: 0, enableInsets: false)
+        self.collectionView.anchor(top: self.tableView.bottomAnchor, left: self.baseView.leftAnchor, bottom: self.baseView.bottomAnchor, right: self.baseView.rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: 0, paddingBottom: (Dimens.shared.spaceNormal / 2), paddingRight: 0, width: 0, height: colletionViewHeight, enableInsets: false)
+        self.tableViewEmptyLabel.anchor(top: self.searchTextField.bottomAnchor, left: self.baseView.leftAnchor, bottom: nil, right: self.baseView.rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: Dimens.shared.spaceNormal, paddingBottom: 0, paddingRight: Dimens.shared.spaceNormal, width: 0, height: 0, enableInsets: false)
     }
 }
-
-
-
