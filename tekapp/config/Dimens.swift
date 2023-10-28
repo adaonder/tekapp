@@ -24,7 +24,7 @@ public class Dimens {
     
     
     
-    var iconSizeBack: CGFloat = 20
+    var iconSizeBack: CGFloat = 32
     
     
     

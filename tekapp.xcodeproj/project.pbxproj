@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5E5396E9D0FB7769257758F1 /* libPods-tekapp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 788C50C7264C8C1C912D8170 /* libPods-tekapp.a */; };
 		703327062AEC3C580062D971 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 703327082AEC3C580062D971 /* Localizable.strings */; };
 		7033270A2AEC3CA00062D971 /* StringEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 703327092AEC3CA00062D971 /* StringEX.swift */; };
 		703DA0892AE81F6000E9B97D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 703DA0882AE81F6000E9B97D /* AppDelegate.swift */; };
@@ -23,6 +22,7 @@
 		7080E41B2AE95832009F0C55 /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7080E41A2AE95832009F0C55 /* Search.swift */; };
 		7080E41E2AE95B8C009F0C55 /* ApiResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7080E41D2AE95B8C009F0C55 /* ApiResponse.swift */; };
 		7080E4232AE95CC3009F0C55 /* ApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7080E4222AE95CC3009F0C55 /* ApiService.swift */; };
+		70B545C22AED9350005585AA /* SearchDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B545C12AED9350005585AA /* SearchDetail.swift */; };
 		70B65F102AE9629C00A51CEA /* HTTPStatusCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B65F0F2AE9629C00A51CEA /* HTTPStatusCode.swift */; };
 		70B65F132AE96D2C00A51CEA /* DialogUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B65F122AE96D2C00A51CEA /* DialogUtil.swift */; };
 		70B65F152AE96D9D00A51CEA /* LoadingDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B65F142AE96D9D00A51CEA /* LoadingDialog.swift */; };
@@ -32,7 +32,7 @@
 		70B65F292AEA817100A51CEA /* UIViewEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B65F282AEA817100A51CEA /* UIViewEX.swift */; };
 		70B65F2B2AEA97D900A51CEA /* UIViewControllerEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B65F2A2AEA97D900A51CEA /* UIViewControllerEX.swift */; };
 		70B65F2D2AEAA37600A51CEA /* SearchCVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B65F2C2AEAA37600A51CEA /* SearchCVC.swift */; };
-		70D96B8B2AED2B4B005D7871 /* UIImageViewEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70D96B8A2AED2B4B005D7871 /* UIImageViewEX.swift */; };
+		70D96B8B2AED2B4B005D7871 /* UIButtonEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70D96B8A2AED2B4B005D7871 /* UIButtonEX.swift */; };
 		70D96B8D2AED2E23005D7871 /* BaseVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70D96B8C2AED2E23005D7871 /* BaseVC.swift */; };
 		70D96B8F2AED32C1005D7871 /* Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70D96B8E2AED32C1005D7871 /* Images.swift */; };
 		70DF91682AEB0E0F00509B95 /* SearchCellVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DF91672AEB0E0F00509B95 /* SearchCellVM.swift */; };
@@ -56,6 +56,7 @@
 		7080E41A2AE95832009F0C55 /* Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Search.swift; sourceTree = "<group>"; };
 		7080E41D2AE95B8C009F0C55 /* ApiResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiResponse.swift; sourceTree = "<group>"; };
 		7080E4222AE95CC3009F0C55 /* ApiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiService.swift; sourceTree = "<group>"; };
+		70B545C12AED9350005585AA /* SearchDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDetail.swift; sourceTree = "<group>"; };
 		70B65F0F2AE9629C00A51CEA /* HTTPStatusCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPStatusCode.swift; sourceTree = "<group>"; };
 		70B65F122AE96D2C00A51CEA /* DialogUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogUtil.swift; sourceTree = "<group>"; };
 		70B65F142AE96D9D00A51CEA /* LoadingDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingDialog.swift; sourceTree = "<group>"; };
@@ -65,13 +66,10 @@
 		70B65F282AEA817100A51CEA /* UIViewEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewEX.swift; sourceTree = "<group>"; };
 		70B65F2A2AEA97D900A51CEA /* UIViewControllerEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerEX.swift; sourceTree = "<group>"; };
 		70B65F2C2AEAA37600A51CEA /* SearchCVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCVC.swift; sourceTree = "<group>"; };
-		70D96B8A2AED2B4B005D7871 /* UIImageViewEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageViewEX.swift; sourceTree = "<group>"; };
+		70D96B8A2AED2B4B005D7871 /* UIButtonEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButtonEX.swift; sourceTree = "<group>"; };
 		70D96B8C2AED2E23005D7871 /* BaseVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseVC.swift; sourceTree = "<group>"; };
 		70D96B8E2AED32C1005D7871 /* Images.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Images.swift; sourceTree = "<group>"; };
 		70DF91672AEB0E0F00509B95 /* SearchCellVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCellVM.swift; sourceTree = "<group>"; };
-		788C50C7264C8C1C912D8170 /* libPods-tekapp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-tekapp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		8E0FDD4E99DE2DA8C214F2EC /* Pods-tekapp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tekapp.release.xcconfig"; path = "Target Support Files/Pods-tekapp/Pods-tekapp.release.xcconfig"; sourceTree = "<group>"; };
-		DF35A9C3157197699E93FF9D /* Pods-tekapp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tekapp.debug.xcconfig"; path = "Target Support Files/Pods-tekapp/Pods-tekapp.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,7 +77,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5E5396E9D0FB7769257758F1 /* libPods-tekapp.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -91,8 +88,6 @@
 			children = (
 				703DA0872AE81F6000E9B97D /* tekapp */,
 				703DA0862AE81F6000E9B97D /* Products */,
-				8CBEAABB163CC32A60D3C3E4 /* Pods */,
-				9680B506193F003BD97B9039 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -163,6 +158,7 @@
 			isa = PBXGroup;
 			children = (
 				7080E41A2AE95832009F0C55 /* Search.swift */,
+				70B545C12AED9350005585AA /* SearchDetail.swift */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -191,7 +187,7 @@
 				70B65F2A2AEA97D900A51CEA /* UIViewControllerEX.swift */,
 				70B65F282AEA817100A51CEA /* UIViewEX.swift */,
 				703327092AEC3CA00062D971 /* StringEX.swift */,
-				70D96B8A2AED2B4B005D7871 /* UIImageViewEX.swift */,
+				70D96B8A2AED2B4B005D7871 /* UIButtonEX.swift */,
 			);
 			path = extension;
 			sourceTree = "<group>";
@@ -260,23 +256,6 @@
 			path = cell;
 			sourceTree = "<group>";
 		};
-		8CBEAABB163CC32A60D3C3E4 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				DF35A9C3157197699E93FF9D /* Pods-tekapp.debug.xcconfig */,
-				8E0FDD4E99DE2DA8C214F2EC /* Pods-tekapp.release.xcconfig */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
-		9680B506193F003BD97B9039 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				788C50C7264C8C1C912D8170 /* libPods-tekapp.a */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -284,7 +263,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 703DA0992AE81F6200E9B97D /* Build configuration list for PBXNativeTarget "tekapp" */;
 			buildPhases = (
-				EB22760E4B36EE538B3AD8E7 /* [CP] Check Pods Manifest.lock */,
 				703DA0812AE81F6000E9B97D /* Sources */,
 				703DA0822AE81F6000E9B97D /* Frameworks */,
 				703DA0832AE81F6000E9B97D /* Resources */,
@@ -345,31 +323,6 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		EB22760E4B36EE538B3AD8E7 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-tekapp-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		703DA0812AE81F6000E9B97D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -389,6 +342,7 @@
 				70506E832AEBFB6E0066A690 /* DetailViewController.swift in Sources */,
 				70B65F1D2AEA4FDB00A51CEA /* SearchVM.swift in Sources */,
 				70D96B8F2AED32C1005D7871 /* Images.swift in Sources */,
+				70B545C22AED9350005585AA /* SearchDetail.swift in Sources */,
 				703DA08B2AE81F6000E9B97D /* SceneDelegate.swift in Sources */,
 				70B65F152AE96D9D00A51CEA /* LoadingDialog.swift in Sources */,
 				70B65F292AEA817100A51CEA /* UIViewEX.swift in Sources */,
@@ -396,7 +350,7 @@
 				70506E852AEC0E180066A690 /* Dimens.swift in Sources */,
 				7080E4232AE95CC3009F0C55 /* ApiService.swift in Sources */,
 				7033270A2AEC3CA00062D971 /* StringEX.swift in Sources */,
-				70D96B8B2AED2B4B005D7871 /* UIImageViewEX.swift in Sources */,
+				70D96B8B2AED2B4B005D7871 /* UIButtonEX.swift in Sources */,
 				70B65F102AE9629C00A51CEA /* HTTPStatusCode.swift in Sources */,
 				7080E4192AE95578009F0C55 /* Parameters.swift in Sources */,
 			);
@@ -548,7 +502,6 @@
 		};
 		703DA09A2AE81F6200E9B97D /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = DF35A9C3157197699E93FF9D /* Pods-tekapp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -578,7 +531,6 @@
 		};
 		703DA09B2AE81F6200E9B97D /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8E0FDD4E99DE2DA8C214F2EC /* Pods-tekapp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

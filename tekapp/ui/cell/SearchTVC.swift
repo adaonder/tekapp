@@ -12,7 +12,7 @@ class SearchTVC: UITableViewCell {
     
     public static var id = "SearchTVC"
     
-
+    
     
     private let searchPoster : UIImageView = {
         let imgView = UIImageView()

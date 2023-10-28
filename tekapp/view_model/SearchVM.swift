@@ -26,7 +26,7 @@ class SearchVM {
     
     
     func getData(_ searchText: String, _ page: Int, _ searchEnable: Bool = true, _ success: @escaping ([Search]) -> Void, _ callbackError : @escaping (String) -> Void ) {
-      
+        
         let path = Parameters.API_URL + String.init(format: Parameters.API_ENDPOINT_SEARCH, searchText, "\(page)")
         
         if searchEnable {
@@ -48,9 +48,7 @@ class SearchVM {
                 success(list)
             } else {
                 if(searchEnable) {
-                    self.tableViewList.removeAll()
-                    self.tableViewTotalResults = 0
-                    success([])
+                    self.successEmpty(success)
                 } else {
                     callbackError(result.Error ?? "-")
                 }
@@ -59,14 +57,18 @@ class SearchVM {
         } callbackError: { error in
             self.oldRequestPath = nil
             if(searchEnable) {
-                self.tableViewList.removeAll()
-                self.tableViewTotalResults = 0
-                success([])
+                self.successEmpty(success)
             } else {
                 callbackError(error ?? "-")
             }
             
         }
+    }
+    
+    func successEmpty(_ success: @escaping ([Search]) -> Void) {
+        self.tableViewList.removeAll()
+        self.tableViewTotalResults = 0
+        success([])
     }
     
     
