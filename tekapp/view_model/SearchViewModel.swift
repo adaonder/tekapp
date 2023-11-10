@@ -19,6 +19,31 @@ class SearchViewModel {
     var collectionTotalResults:Int = 0
     var oldRequestPath : String? = nil
     
+    
+    func getDataMultiRequest(_ searchText: String, _ completion: @escaping () -> Void, _ callbackError : @escaping (String) -> Void) {
+        let dispatchGroup = DispatchGroup()
+        
+        dispatchGroup.enter()
+        self.getData(searchText, self.tableViewPage, false) { currentList in
+            dispatchGroup.leave()
+        } _: { error in
+            callbackError(error)
+            dispatchGroup.leave()
+        }
+        
+        dispatchGroup.enter()
+        self.getDataForHorList(self.collectionPage) { currentList in
+            dispatchGroup.leave()
+        } _: { error in
+            callbackError(error)
+            dispatchGroup.leave()
+        }
+        
+        dispatchGroup.notify(queue: .main) {
+            completion()
+        }
+    }
+    
     func getData(_ searchText: String, _ page: Int, _ searchEnable: Bool = true, _ success: @escaping ([Search]) -> Void, _ callbackError : @escaping (String) -> Void ) {
         let path = Parameters.API_URL + String.init(format: Parameters.API_ENDPOINT_SEARCH, searchText, "\(page)")
         

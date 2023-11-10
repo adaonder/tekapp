@@ -53,17 +53,11 @@ class MainViewController: BaseViewController {
     
     override func initData() {
         DialogUtil.shared.showLoading()
-        self.searchViewModel.getData(searchText, self.searchViewModel.tableViewPage, false) { currentList in
-            
-            self.searchViewModel.getDataForHorList(self.searchViewModel.collectionPage) { currentList in
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                    DialogUtil.shared.hideLoading()
-                    self.tableView.reloadData()
-                    self.collectionView.reloadData()
-                }
-            } _: { error in
+        self.searchViewModel.getDataMultiRequest(searchText) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                 DialogUtil.shared.hideLoading()
-                DialogUtil.shared.showMessage(self, "error".localized(), error)
+                self.tableView.reloadData()
+                self.collectionView.reloadData()
             }
         } _: { error in
             DialogUtil.shared.hideLoading()
