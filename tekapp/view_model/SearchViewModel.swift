@@ -1,5 +1,5 @@
 //
-//  SearchVM.swift
+//  SearchViewModel.swift
 //  tekapp
 //
 //  Created by Önder Ada on 26.10.2023.
@@ -8,25 +8,18 @@
 import Foundation
 
 
-class SearchVM {
-    var tableViewList = [SearchCellVM]()
-    var collectionViewList = [SearchCellVM]()
-    
+class SearchViewModel {
+    var tableViewList = [SearchCellViewModel]()
+    var collectionViewList = [SearchCellViewModel]()
     var defaultSearchText = "Star"
     let defaultSearchCollectionText = "Comedy"
-    
     var tableViewPage:Int = 1
     var tableViewTotalResults:Int = 0
-    
     var collectionPage:Int = 1
     var collectionTotalResults:Int = 0
-    
-    
     var oldRequestPath : String? = nil
     
-    
     func getData(_ searchText: String, _ page: Int, _ searchEnable: Bool = true, _ success: @escaping ([Search]) -> Void, _ callbackError : @escaping (String) -> Void ) {
-        
         let path = Parameters.API_URL + String.init(format: Parameters.API_ENDPOINT_SEARCH, searchText, "\(page)")
         
         if searchEnable {
@@ -37,12 +30,11 @@ class SearchVM {
             oldRequestPath = path
         }
         
-        
         ApiService.shared.makeRequest(path: path) { (result: ApiResponse<[Search]>) in
             self.oldRequestPath = nil
             if let list = result.Search, result.Response == Parameters.responseSuccess {
                 self.tableViewList.append(contentsOf: list.map({ search in
-                    SearchCellVM(search)
+                    SearchCellViewModel(search)
                 }))
                 self.tableViewTotalResults = Int(result.totalResults!) ?? 0
                 success(list)
@@ -71,7 +63,6 @@ class SearchVM {
         success([])
     }
     
-    
     func getDataForHorList (_ page: Int, _ success: @escaping ([Search]) -> Void, _ callbackError : @escaping (String) -> Void ) {
         
         let path = Parameters.API_URL + String.init(format: Parameters.API_ENDPOINT_SEARCH, defaultSearchCollectionText, "\(page)")
@@ -80,7 +71,7 @@ class SearchVM {
             
             if let list = result.Search, result.Response == Parameters.responseSuccess {
                 self.collectionViewList.append(contentsOf: list.map({ search in
-                    SearchCellVM(search)
+                    SearchCellViewModel(search)
                 }))
                 self.collectionTotalResults = Int(result.totalResults!) ?? 0
                 success(list)
@@ -92,5 +83,4 @@ class SearchVM {
             callbackError(error ?? "-")
         }
     }
-    
 }

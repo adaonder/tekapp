@@ -1,5 +1,5 @@
 //
-//  DetailViewController.swift
+//  MainDetailViewController.swift
 //  tekapp
 //
 //  Created by Önder Ada on 27.10.2023.
@@ -8,24 +8,12 @@
 import UIKit
 
 
-class DetailViewController: BaseVC {
-    
-    var searchCellVM: SearchCellVM!
+class MainDetailViewController: BaseViewController {
+    var searchCellViewModel: SearchCellViewModel!
     var searchDetail: SearchDetail? = nil
     
-    lazy var searchDetailVM: SearchDetailVM = {
-        return SearchDetailVM()
-    }()
-    
-    
-    private let backButton: UIButton = {
-        let btn  = UIButton(type: .custom)
-        btn.setImage(UIImage(named: Images.shared.leftArrow), for: .normal)
-        btn.setImageTintColor(.white)
-        btn.contentVerticalAlignment = .fill
-        btn.contentHorizontalAlignment = .fill
-        btn.imageEdgeInsets = UIEdgeInsets(top: Dimens.shared.spaceSmall, left: Dimens.shared.spaceSmall, bottom: Dimens.shared.spaceSmall, right: Dimens.shared.spaceSmall)
-        return btn
+    lazy var searchDetailViewModel: SearchDetailViewModel = {
+        return SearchDetailViewModel()
     }()
     
     private let searchPoster : UIImageView = {
@@ -52,26 +40,22 @@ class DetailViewController: BaseVC {
         return lbl
     }()
     
-    static func newIntance (_ searchCellVM: SearchCellVM) -> DetailViewController {
-        let vc = DetailViewController()
-        vc.searchCellVM = searchCellVM
+    static func newIntance (_ searchCellViewModel: SearchCellViewModel) -> MainDetailViewController {
+        let vc = MainDetailViewController()
+        vc.searchCellViewModel = searchCellViewModel
         vc.modalPresentationStyle = .fullScreen
         return vc
     }
-    
     
     override func initViews() {
         addViews()
         setConstraints()
         updateUI()
-        
-        backButton.setOnClickListener(self, #selector(backButtonListener))
     }
     
-    
     override func initData() {
-        if let id = searchCellVM.search.imdbID {
-            searchDetailVM.getData(id) { result in
+        if let id = searchCellViewModel.search.imdbID {
+            searchDetailViewModel.getData(id) { result in
                 DispatchQueue.main.async {
                     self.searchDetail = result
                     self.updateUIDetailText()
@@ -85,9 +69,7 @@ class DetailViewController: BaseVC {
         }
     }
     
-    
     func addViews() {
-        self.baseView.addSubview(backButton)
         self.baseView.addSubview(searchPoster)
         self.baseView.addSubview(searchTitle)
         self.baseView.addSubview(searchPlot)
@@ -95,17 +77,14 @@ class DetailViewController: BaseVC {
     
     func setConstraints() {
         let displayHeight: CGFloat = self.view.frame.height
-        
-        backButton.anchor(top: self.baseView.topAnchor, left: self.baseView.leftAnchor, bottom: nil, right: nil, paddingTop: Dimens.shared.spaceSmall, paddingLeft: Dimens.shared.spaceNormal, paddingBottom: 0, paddingRight: 0, width: Dimens.shared.iconSizeBack, height: Dimens.shared.iconSizeBack, enableInsets: false)
-        searchPoster.anchor(top: self.backButton.bottomAnchor, left: self.baseView.leftAnchor, bottom: nil, right: self.baseView.rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: Dimens.shared.spaceNormal, paddingBottom: 0, paddingRight: Dimens.shared.spaceNormal, width: 0, height: displayHeight / 4, enableInsets: false)
+        searchPoster.anchor(top: self.baseView.topAnchor, left: self.baseView.leftAnchor, bottom: nil, right: self.baseView.rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: Dimens.shared.spaceNormal, paddingBottom: 0, paddingRight: Dimens.shared.spaceNormal, width: 0, height: displayHeight / 4, enableInsets: false)
         searchTitle.anchor(top: self.searchPoster.bottomAnchor, left: self.baseView.leftAnchor, bottom: nil, right: self.baseView.rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: Dimens.shared.spaceNormal, paddingBottom: 0, paddingRight: Dimens.shared.spaceNormal, width: 0, height: 0, enableInsets: false)
         searchPlot.anchor(top: self.searchTitle.bottomAnchor, left: self.baseView.leftAnchor, bottom: nil, right: self.baseView.rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: Dimens.shared.spaceNormal, paddingBottom: 0, paddingRight: Dimens.shared.spaceNormal, width: 0, height: 0, enableInsets: false)
     }
     
     func updateUI() {
-        if let poster = searchCellVM.search.Poster {
-            
-            self.searchCellVM.downloadImage(url: poster) { [weak self] image in
+        if let poster = searchCellViewModel.search.Poster {
+            self.searchCellViewModel.downloadImage(url: poster) { [weak self] image in
                 DispatchQueue.main.async {
                     self?.searchPoster.image = image
                 }
@@ -113,8 +92,7 @@ class DetailViewController: BaseVC {
         } else {
             searchPoster.image = UIImage(named: Images.shared.avatar)
         }
-        
-        searchTitle.text = searchCellVM.search.Title ?? "-"
+        searchTitle.text = searchCellViewModel.search.Title ?? "-"
     }
     
     func updateUIDetailText() {

@@ -1,5 +1,5 @@
 //
-//  SearchTVC.swift
+//  SearchTableViewCell.swift
 //  tekapp
 //
 //  Created by Önder Ada on 26.10.2023.
@@ -8,11 +8,8 @@
 import UIKit
 
 
-class SearchTVC: UITableViewCell {
-    
-    public static var id = "SearchTVC"
-    
-    
+class SearchTableViewCell: UITableViewCell {
+    public static var reuseIdentifier = "SearchTableViewCell"
     
     private let searchPoster : UIImageView = {
         let imgView = UIImageView()
@@ -34,10 +31,8 @@ class SearchTVC: UITableViewCell {
         lbl.textColor = .white
         lbl.font = UIFont.systemFont(ofSize: Dimens.shared.textSizeTitle)
         lbl.textAlignment = .left
-        lbl.numberOfLines = 0
         return lbl
     }()
-    
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -58,7 +53,7 @@ class SearchTVC: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setCell(_ viewModel : SearchCellVM) {
+    func setCell(_ viewModel : SearchCellViewModel) {
         
         searchTitle.text = viewModel.search.Title ?? "-"
         searchYear.text = viewModel.search.Year ?? "-"
@@ -75,5 +70,4 @@ class SearchTVC: UITableViewCell {
         }
         
     }
-    
 }

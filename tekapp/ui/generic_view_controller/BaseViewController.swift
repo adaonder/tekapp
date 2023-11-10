@@ -8,10 +8,8 @@
 import UIKit
 
 
-class BaseVC: UIViewController {
+class BaseViewController: UIViewController {
     let baseView = UIView()
-    
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()

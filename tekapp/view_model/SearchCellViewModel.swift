@@ -1,5 +1,5 @@
 //
-//  ImageVM.swift
+//  SearchCellViewModel.swift
 //  tekapp
 //
 //  Created by Önder Ada on 27.10.2023.
@@ -9,11 +9,10 @@ import Foundation
 import UIKit
 
 
-class SearchCellVM {
+class SearchCellViewModel {
     init(_ search : Search) {
         self.search = search
     }
-    
     
     var search : Search!
     private var isDownloading = false
