@@ -31,13 +31,14 @@ class MainViewController: BaseViewController {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: animated)
     }
-
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationController?.setNavigationBarHidden(false, animated: animated)
     }
     
     override func initViews() {
+        self.searchViewModel.delegate = self
         self.colletionViewHeight = self.view.frame.height / 4
         
         self.initSearchTextField()
@@ -49,78 +50,23 @@ class MainViewController: BaseViewController {
         self.configureConstraint()
     }
     
-    
-    
     override func initData() {
-        DialogUtil.shared.showLoading()
-        self.searchViewModel.getDataMultiRequest(searchText) {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                DialogUtil.shared.hideLoading()
-                self.tableView.reloadData()
-                self.collectionView.reloadData()
-            }
-        } _: { error in
-            DialogUtil.shared.hideLoading()
-            DialogUtil.shared.showMessage(self, "error".localized(), error)
-        }
+        self.searchViewModel.getInitSearchData(searchText)
     }
-    
-    func getDataForTableView(_ searchEnable: Bool) {
-        isTableViewLoading = true
-        self.startUpdateListAnim(self.tableView.tableFooterView!)
-        
-        self.tableViewEmptyLabel.isHidden = true
-        self.searchViewModel.getData(self.searchText, self.searchViewModel.tableViewPage, searchEnable) { currentList in
-            
-            DispatchQueue.main.async {
-                self.isTableViewLoading = false
-                self.tableView.reloadData()
-                self.stopUpdateListAnim(self.tableView.tableFooterView!)
-                if(currentList.isEmpty) {
-                    self.tableViewEmptyLabel.isHidden = false
-                }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                    self.isSearchTableViewLoading = false
-                }
-            }
-        } _: { error in
-            DispatchQueue.main.async {
-                self.isTableViewLoading = false
-                self.stopUpdateListAnim(self.tableView.tableFooterView!)
-                self.tableViewEmptyLabel.isHidden = false
-                //DialogUtil.shared.showMessage(self, "error".localized(), error)
-            }
-        }
-    }
-    
-    func getDataForColletionView() {
-        isColletionViewLoading = true
-        self.searchViewModel.getDataForHorList(self.searchViewModel.collectionPage) { currentList in
-            DispatchQueue.main.async {
-                self.isColletionViewLoading = false
-                self.collectionView.reloadData()
-            }
-        } _: { error in
-            self.isColletionViewLoading = false
-            DialogUtil.shared.showMessage(self, "error".localized(), error)
-        }
-    }
-    
     
     func tableViewLoadNextData() {
         self.searchViewModel.tableViewPage += 1
-        self.getDataForTableView(false)
+        self.searchViewModel.getSearchTextData(self.searchText, false)
     }
     
     func colletionViewLoadNextData() {
         self.searchViewModel.collectionPage += 1
-        self.getDataForColletionView()
+        self.searchViewModel.getSearchComedyData()
     }
     
     func startUpdateListAnim(_ view: UIView) {
         view.isHidden = false
         (view as! UIActivityIndicatorView).startAnimating()
-        
     }
     
     func stopUpdateListAnim(_ view: UIView) {
@@ -137,8 +83,81 @@ class MainViewController: BaseViewController {
             self.searchViewModel.tableViewList.removeAll()
             self.searchViewModel.tableViewPage = 1
             self.searchText = text
-            self.getDataForTableView(true)
+            self.searchViewModel.getSearchTextData(self.searchText, true)
         })
+    }
+}
+
+//SearchRequestDelegate
+extension MainViewController : SearchRequestProtocol {
+    func didInitUpdate(with state: ViewState) {
+        DispatchQueue.main.async {
+            [weak self] in
+            guard let self = self else { return }
+            switch state {
+            case .idle:
+                break
+            case .loading:
+                DialogUtil.shared.showLoading()
+            case .success:
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                    DialogUtil.shared.hideLoading()
+                    self.tableView.reloadData()
+                    self.collectionView.reloadData()
+                }
+            case .error(let error):
+                DialogUtil.shared.hideLoading()
+                DialogUtil.shared.showMessage(self, "error".localized(), error)
+            }
+        }
+    }
+    
+    func didTableViewUpdate(with state: ViewState) {
+        DispatchQueue.main.async {
+            [weak self] in
+            guard let self = self else { return }
+            switch state {
+            case .idle:
+                break
+            case .loading:
+                isTableViewLoading = true
+                self.startUpdateListAnim(self.tableView.tableFooterView!)
+                self.tableViewEmptyLabel.isHidden = true
+            case .success:
+                self.isTableViewLoading = false
+                self.tableView.reloadData()
+                self.stopUpdateListAnim(self.tableView.tableFooterView!)
+                if(self.searchViewModel.tableViewList.isEmpty) {
+                    self.tableViewEmptyLabel.isHidden = false
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    self.isSearchTableViewLoading = false
+                }
+            case .error(_):
+                self.isTableViewLoading = false
+                self.stopUpdateListAnim(self.tableView.tableFooterView!)
+                self.tableViewEmptyLabel.isHidden = false
+            }
+        }
+    }
+    
+    func didColletionUpdate(with state: ViewState) {
+        DispatchQueue.main.async {
+            [weak self] in
+            guard let self = self else { return }
+            switch state {
+            case .idle:
+                break
+            case .loading:
+                isColletionViewLoading = true
+            case .success:
+                self.isColletionViewLoading = false
+                self.collectionView.reloadData()
+            case .error(let error):
+                self.isColletionViewLoading = false
+                DialogUtil.shared.showMessage(self, "error".localized(), error)
+            }
+        }
     }
 }
 

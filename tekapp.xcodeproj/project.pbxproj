@@ -18,10 +18,15 @@
 		70506E852AEC0E180066A690 /* Dimens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70506E842AEC0E180066A690 /* Dimens.swift */; };
 		70506E872AEC13980066A690 /* SearchDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70506E862AEC13980066A690 /* SearchDetailViewModel.swift */; };
 		706E95CA2AFE45C3004923A3 /* AppHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706E95C92AFE45C3004923A3 /* AppHelper.swift */; };
+		706E95D02AFF5D03004923A3 /* ViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706E95CF2AFF5D03004923A3 /* ViewState.swift */; };
+		706E95D32AFF5E2E004923A3 /* SearchRequestProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706E95D22AFF5E2E004923A3 /* SearchRequestProtocol.swift */; };
 		7080E4192AE95578009F0C55 /* Parameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7080E4182AE95578009F0C55 /* Parameters.swift */; };
 		7080E41B2AE95832009F0C55 /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7080E41A2AE95832009F0C55 /* Search.swift */; };
 		7080E41E2AE95B8C009F0C55 /* ApiResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7080E41D2AE95B8C009F0C55 /* ApiResponse.swift */; };
 		7080E4232AE95CC3009F0C55 /* ApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7080E4222AE95CC3009F0C55 /* ApiService.swift */; };
+		70A264102AFFBDA500F3A1F9 /* SearchListViewType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70A2640F2AFFBDA500F3A1F9 /* SearchListViewType.swift */; };
+		70A264122AFFBEB300F3A1F9 /* SearchViewModelData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70A264112AFFBEB300F3A1F9 /* SearchViewModelData.swift */; };
+		70A264142AFFC94D00F3A1F9 /* SearchDetailRequestProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70A264132AFFC94D00F3A1F9 /* SearchDetailRequestProtocol.swift */; };
 		70B545C22AED9350005585AA /* SearchDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B545C12AED9350005585AA /* SearchDetail.swift */; };
 		70B65F102AE9629C00A51CEA /* HTTPStatusCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B65F0F2AE9629C00A51CEA /* HTTPStatusCode.swift */; };
 		70B65F132AE96D2C00A51CEA /* DialogUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B65F122AE96D2C00A51CEA /* DialogUtil.swift */; };
@@ -52,10 +57,15 @@
 		70506E842AEC0E180066A690 /* Dimens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dimens.swift; sourceTree = "<group>"; };
 		70506E862AEC13980066A690 /* SearchDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDetailViewModel.swift; sourceTree = "<group>"; };
 		706E95C92AFE45C3004923A3 /* AppHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppHelper.swift; sourceTree = "<group>"; };
+		706E95CF2AFF5D03004923A3 /* ViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewState.swift; sourceTree = "<group>"; };
+		706E95D22AFF5E2E004923A3 /* SearchRequestProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchRequestProtocol.swift; sourceTree = "<group>"; };
 		7080E4182AE95578009F0C55 /* Parameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parameters.swift; sourceTree = "<group>"; };
 		7080E41A2AE95832009F0C55 /* Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Search.swift; sourceTree = "<group>"; };
 		7080E41D2AE95B8C009F0C55 /* ApiResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiResponse.swift; sourceTree = "<group>"; };
 		7080E4222AE95CC3009F0C55 /* ApiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiService.swift; sourceTree = "<group>"; };
+		70A2640F2AFFBDA500F3A1F9 /* SearchListViewType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchListViewType.swift; sourceTree = "<group>"; };
+		70A264112AFFBEB300F3A1F9 /* SearchViewModelData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModelData.swift; sourceTree = "<group>"; };
+		70A264132AFFC94D00F3A1F9 /* SearchDetailRequestProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDetailRequestProtocol.swift; sourceTree = "<group>"; };
 		70B545C12AED9350005585AA /* SearchDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDetail.swift; sourceTree = "<group>"; };
 		70B65F0F2AE9629C00A51CEA /* HTTPStatusCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPStatusCode.swift; sourceTree = "<group>"; };
 		70B65F122AE96D2C00A51CEA /* DialogUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogUtil.swift; sourceTree = "<group>"; };
@@ -146,9 +156,29 @@
 			path = main_detail_screen;
 			sourceTree = "<group>";
 		};
+		706E95CE2AFF5A74004923A3 /* enums */ = {
+			isa = PBXGroup;
+			children = (
+				706E95CF2AFF5D03004923A3 /* ViewState.swift */,
+				70A2640F2AFFBDA500F3A1F9 /* SearchListViewType.swift */,
+			);
+			path = enums;
+			sourceTree = "<group>";
+		};
+		706E95D12AFF5DD8004923A3 /* protocols */ = {
+			isa = PBXGroup;
+			children = (
+				706E95D22AFF5E2E004923A3 /* SearchRequestProtocol.swift */,
+				70A264132AFFC94D00F3A1F9 /* SearchDetailRequestProtocol.swift */,
+			);
+			path = protocols;
+			sourceTree = "<group>";
+		};
 		7080E4132AE93D13009F0C55 /* data */ = {
 			isa = PBXGroup;
 			children = (
+				706E95D12AFF5DD8004923A3 /* protocols */,
+				706E95CE2AFF5A74004923A3 /* enums */,
 				7080E4212AE95CA0009F0C55 /* service */,
 				7080E4202AE95C56009F0C55 /* model */,
 				7080E41F2AE95C4B009F0C55 /* response */,
@@ -191,6 +221,7 @@
 			isa = PBXGroup;
 			children = (
 				7080E41A2AE95832009F0C55 /* Search.swift */,
+				70A264112AFFBEB300F3A1F9 /* SearchViewModelData.swift */,
 				70B545C12AED9350005585AA /* SearchDetail.swift */,
 			);
 			path = model;
@@ -348,6 +379,8 @@
 				70B65F132AE96D2C00A51CEA /* DialogUtil.swift in Sources */,
 				70D96B8D2AED2E23005D7871 /* BaseViewController.swift in Sources */,
 				70506E872AEC13980066A690 /* SearchDetailViewModel.swift in Sources */,
+				70A264142AFFC94D00F3A1F9 /* SearchDetailRequestProtocol.swift in Sources */,
+				706E95D02AFF5D03004923A3 /* ViewState.swift in Sources */,
 				70B65F272AEA55CA00A51CEA /* SearchTableViewCell.swift in Sources */,
 				70B65F182AE96E3800A51CEA /* UIScreenEX.swift in Sources */,
 				70DF91682AEB0E0F00509B95 /* SearchCellViewModel.swift in Sources */,
@@ -356,8 +389,10 @@
 				7080E41E2AE95B8C009F0C55 /* ApiResponse.swift in Sources */,
 				70506E832AEBFB6E0066A690 /* MainDetailViewController.swift in Sources */,
 				70B65F1D2AEA4FDB00A51CEA /* SearchViewModel.swift in Sources */,
+				70A264102AFFBDA500F3A1F9 /* SearchListViewType.swift in Sources */,
 				70D96B8F2AED32C1005D7871 /* Images.swift in Sources */,
 				70B545C22AED9350005585AA /* SearchDetail.swift in Sources */,
+				706E95D32AFF5E2E004923A3 /* SearchRequestProtocol.swift in Sources */,
 				703DA08B2AE81F6000E9B97D /* SceneDelegate.swift in Sources */,
 				70B65F152AE96D9D00A51CEA /* LoadingDialog.swift in Sources */,
 				70B65F292AEA817100A51CEA /* UIViewEX.swift in Sources */,
@@ -366,6 +401,7 @@
 				7080E4232AE95CC3009F0C55 /* ApiService.swift in Sources */,
 				7033270A2AEC3CA00062D971 /* StringEX.swift in Sources */,
 				70D96B8B2AED2B4B005D7871 /* UIButtonEX.swift in Sources */,
+				70A264122AFFBEB300F3A1F9 /* SearchViewModelData.swift in Sources */,
 				70B65F102AE9629C00A51CEA /* HTTPStatusCode.swift in Sources */,
 				7080E4192AE95578009F0C55 /* Parameters.swift in Sources */,
 				706E95CA2AFE45C3004923A3 /* AppHelper.swift in Sources */,

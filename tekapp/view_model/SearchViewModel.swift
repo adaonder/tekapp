@@ -8,7 +8,24 @@
 import Foundation
 
 
-class SearchViewModel {
+final class SearchViewModel {
+    weak var delegate: SearchRequestProtocol?
+    private var searchViewModelData: SearchViewModelData {
+        didSet {
+            switch searchViewModelData.searchListViewType {
+            case .multi: 
+                self.delegate?.didInitUpdate(with: searchViewModelData.state)
+                break
+            case .searchTableView: 
+                self.delegate?.didTableViewUpdate(with: searchViewModelData.state)
+                break
+            case .searchColletionView: 
+                self.delegate?.didColletionUpdate(with: searchViewModelData.state)
+                break
+            }
+        }
+    }
+    
     var tableViewList = [SearchCellViewModel]()
     var collectionViewList = [SearchCellViewModel]()
     var defaultSearchText = "Star"
@@ -19,39 +36,67 @@ class SearchViewModel {
     var collectionTotalResults:Int = 0
     var oldRequestPath : String? = nil
     
+    init() {
+        self.searchViewModelData = SearchViewModelData(state: .idle)
+    }
     
-    func getDataMultiRequest(_ searchText: String, _ completion: @escaping () -> Void, _ callbackError : @escaping (String) -> Void) {
+    
+    func getInitSearchData(_ searchText: String) {
+        var callbackErrorText: String? = nil
+        self.searchViewModelData = SearchViewModelData(state: .loading)
         let dispatchGroup = DispatchGroup()
         
         dispatchGroup.enter()
-        self.getData(searchText, self.tableViewPage, false) { currentList in
+        self.getSearchTextData(searchText, self.tableViewPage, false) { currentList in
             dispatchGroup.leave()
         } _: { error in
-            callbackError(error)
+            callbackErrorText = error
             dispatchGroup.leave()
         }
         
         dispatchGroup.enter()
-        self.getDataForHorList(self.collectionPage) { currentList in
+        self.getSearchComedyData(self.collectionPage) { currentList in
             dispatchGroup.leave()
         } _: { error in
-            callbackError(error)
+            callbackErrorText = error
             dispatchGroup.leave()
         }
         
         dispatchGroup.notify(queue: .main) {
-            completion()
+            if let callbackErrorText = callbackErrorText {
+                self.searchViewModelData = SearchViewModelData(state: .error(callbackErrorText))
+            } else {
+                self.searchViewModelData = SearchViewModelData(state: .success)
+            }
         }
     }
     
-    func getData(_ searchText: String, _ page: Int, _ searchEnable: Bool = true, _ success: @escaping ([Search]) -> Void, _ callbackError : @escaping (String) -> Void ) {
+    func getSearchTextData(_ searchText: String, _ searchEnable: Bool) {
+        self.searchViewModelData = SearchViewModelData(state: .loading, searchListViewType: .searchTableView)
+        self.getSearchTextData(searchText, self.tableViewPage, searchEnable) { currentList in
+            self.searchViewModelData = SearchViewModelData(state: .success, searchListViewType: .searchTableView)
+        } _: { error in
+            self.searchViewModelData = SearchViewModelData(state: .error(error), searchListViewType: .searchTableView)
+        }
+    }
+    
+    func getSearchComedyData() {
+        self.searchViewModelData = SearchViewModelData(state: .loading, searchListViewType: .searchColletionView)
+        self.getSearchComedyData(self.collectionPage) { currentList in
+            self.searchViewModelData = SearchViewModelData(state: .success, searchListViewType: .searchColletionView)
+        } _: { error in
+            self.searchViewModelData = SearchViewModelData(state: .error(error), searchListViewType: .searchColletionView)
+        }
+    }
+    
+    
+    private func getSearchTextData(_ searchText: String, _ page: Int, _ searchEnable: Bool = true, _ success: @escaping ([Search]) -> Void, _ callbackError : @escaping (String) -> Void ) {
         let path = Parameters.API_URL + String.init(format: Parameters.API_ENDPOINT_SEARCH, searchText, "\(page)")
         
         if searchEnable {
             if let path = oldRequestPath {
                 ApiService.shared.cancelAllSearchRunningTask(path)
             }
-            
             oldRequestPath = path
         }
         
@@ -78,17 +123,16 @@ class SearchViewModel {
             } else {
                 callbackError(error ?? "-")
             }
-            
         }
     }
     
-    func successEmpty(_ success: @escaping ([Search]) -> Void) {
+    private func successEmpty(_ success: @escaping ([Search]) -> Void) {
         self.tableViewList.removeAll()
         self.tableViewTotalResults = 0
         success([])
     }
     
-    func getDataForHorList (_ page: Int, _ success: @escaping ([Search]) -> Void, _ callbackError : @escaping (String) -> Void ) {
+    private func getSearchComedyData (_ page: Int, _ success: @escaping ([Search]) -> Void, _ callbackError : @escaping (String) -> Void ) {
         
         let path = Parameters.API_URL + String.init(format: Parameters.API_ENDPOINT_SEARCH, defaultSearchCollectionText, "\(page)")
         

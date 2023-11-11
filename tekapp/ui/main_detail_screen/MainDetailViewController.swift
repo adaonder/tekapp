@@ -9,8 +9,7 @@ import UIKit
 
 
 class MainDetailViewController: BaseViewController {
-    var searchCellViewModel: SearchCellViewModel!
-    var searchDetail: SearchDetail? = nil
+    private var searchCellViewModel: SearchCellViewModel!
     
     lazy var searchDetailViewModel: SearchDetailViewModel = {
         return SearchDetailViewModel()
@@ -48,6 +47,7 @@ class MainDetailViewController: BaseViewController {
     }
     
     override func initViews() {
+        searchDetailViewModel.delegate = self
         addViews()
         setConstraints()
         updateUI()
@@ -55,17 +55,7 @@ class MainDetailViewController: BaseViewController {
     
     override func initData() {
         if let id = searchCellViewModel.search.imdbID {
-            searchDetailViewModel.getData(id) { result in
-                DispatchQueue.main.async {
-                    self.searchDetail = result
-                    self.updateUIDetailText()
-                }
-            } _: { error in
-                DispatchQueue.main.async {
-                    DialogUtil.shared.showMessage(self, "error".localized(), error)
-                }
-                
-            }
+            searchDetailViewModel.getData(id)
         }
     }
     
@@ -96,10 +86,30 @@ class MainDetailViewController: BaseViewController {
     }
     
     func updateUIDetailText() {
-        self.searchPlot.text = searchDetail?.Plot ?? "-"
+        self.searchPlot.text = self.searchDetailViewModel.searchDetail?.Plot ?? "-"
     }
     
     @objc func backButtonListener() {
         self.dismiss(animated: true)
+    }
+}
+
+//SearchDetailRequestProtocol
+extension MainDetailViewController : SearchDetailRequestProtocol {
+    func didUpdate(with state: ViewState) {
+        DispatchQueue.main.async {
+            [weak self] in
+            guard let self = self else { return }
+            switch state {
+            case .idle:
+                break
+            case .loading:
+                break
+            case .success:
+                self.updateUIDetailText()
+            case .error(let error):
+                DialogUtil.shared.showMessage(self, "error".localized(), error)
+            }
+        }
     }
 }

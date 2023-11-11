@@ -8,21 +8,31 @@
 import Foundation
 
 
-class SearchDetailViewModel {
-    func getData (_ id: String, _ completion: @escaping (SearchDetail) -> Void, _ callbackError : @escaping (String) -> Void ) {
-        
+final class SearchDetailViewModel {
+    weak var delegate: SearchDetailRequestProtocol?
+    private var state: ViewState {
+        didSet {
+            self.delegate?.didUpdate(with: state)
+        }
+    }
+    var searchDetail: SearchDetail?
+    
+    init() {
+        self.state = .idle
+    }
+    
+    func getData(_ id: String) {
+        self.state = .loading
         let path = Parameters.API_URL + String.init(format: Parameters.API_ENDPOINT_DETAIL, id)
-        
-        ApiService.shared.makeRequest(path: path) { (result: SearchDetail) in
-            
-            if result.Response == Parameters.responseSuccess {
-                completion(result)
+        ApiService.shared.makeRequest(path: path) { (searchDetail: SearchDetail) in
+            if searchDetail.Response == Parameters.responseSuccess {
+                self.searchDetail = searchDetail
+                self.state = .success
             } else {
-                callbackError(result.Error ?? "-")
+                self.state = .error(searchDetail.Error ?? "-")
             }
-            
         } callbackError: { error in
-            callbackError(error ?? "-")
+            self.state = .error(error ?? "-")
         }
     }
 }
