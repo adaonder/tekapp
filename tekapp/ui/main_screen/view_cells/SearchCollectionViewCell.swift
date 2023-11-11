@@ -22,7 +22,13 @@ class SearchCollectionViewCell: UICollectionViewCell {
         super.init(frame: frame)
         backgroundColor = .black
         addSubview(searchPoster)
-        searchPoster.anchor(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, paddingTop: Dimens.shared.spaceSmall, paddingLeft: 0, paddingBottom: Dimens.shared.spaceSmall, paddingRight: 0, width: 0, height: 0, enableInsets: false)
+        //searchPoster.anchor(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, paddingTop: Dimens.shared.spaceSmall, paddingLeft: 0, paddingBottom: Dimens.shared.spaceSmall, paddingRight: 0, width: 0, height: 0, enableInsets: false)
+        
+        self.searchPoster.translatesAutoresizingMaskIntoConstraints = false
+        self.searchPoster.topAnchor.constraint(equalTo: self.topAnchor, constant: Dimens.shared.spaceSmall).isActive = true
+        self.searchPoster.leftAnchor.constraint(equalTo:  self.leftAnchor, constant: 0).isActive = true
+        self.searchPoster.rightAnchor.constraint(equalTo:  self.rightAnchor, constant: 0).isActive = true
+        self.searchPoster.bottomAnchor.constraint(equalTo:  self.bottomAnchor, constant: -Dimens.shared.spaceSmall).isActive = true
     }
     
     required init?(coder aDecoder: NSCoder) {

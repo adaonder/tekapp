@@ -318,9 +318,45 @@ extension MainViewController {
     }
     
     func configureConstraint() {
-        self.searchTextField.anchor(top: baseView.topAnchor, left: baseView.leftAnchor, bottom: nil, right: baseView.rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: Dimens.shared.spaceNormal, paddingBottom: 0, paddingRight: Dimens.shared.spaceNormal, width: 0, height: searchTextFieldHeight, enableInsets: false)
-        self.tableView.anchor(top: self.searchTextField.bottomAnchor, left: self.baseView.leftAnchor, bottom: nil, right: self.baseView.rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: Dimens.shared.spaceNormal, paddingBottom: 0, paddingRight: Dimens.shared.spaceNormal, width: 0, height: 0, enableInsets: false)
-        self.collectionView.anchor(top: self.tableView.bottomAnchor, left: self.baseView.leftAnchor, bottom: self.baseView.bottomAnchor, right: self.baseView.rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: 0, paddingBottom: (Dimens.shared.spaceNormal / 2), paddingRight: 0, width: 0, height: colletionViewHeight, enableInsets: false)
-        self.tableViewEmptyLabel.anchor(top: self.searchTextField.bottomAnchor, left: self.baseView.leftAnchor, bottom: nil, right: self.baseView.rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: Dimens.shared.spaceNormal, paddingBottom: 0, paddingRight: Dimens.shared.spaceNormal, width: 0, height: 0, enableInsets: false)
+        //Standart olsun diye constraint'ler extension kullanılmadan yazıldı.
+        self.constraintSearchTextField()
+        self.constraintTableView()
+        self.constraintColletionView()
+        self.constraintTableViewEmptyLabel()
+    }
+    
+    func constraintSearchTextField() {
+        //self.searchTextField.anchor(top: baseView.topAnchor, left: baseView.leftAnchor, bottom: nil, right: baseView.rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: Dimens.shared.spaceNormal, paddingBottom: 0, paddingRight: Dimens.shared.spaceNormal, width: 0, height: searchTextFieldHeight, enableInsets: false)
+        self.searchTextField.translatesAutoresizingMaskIntoConstraints = false
+        self.searchTextField.topAnchor.constraint(equalTo: baseView.topAnchor, constant: Dimens.shared.spaceNormal).isActive = true
+        self.searchTextField.leftAnchor.constraint(equalTo: baseView.leftAnchor, constant: Dimens.shared.spaceNormal).isActive = true
+        self.searchTextField.rightAnchor.constraint(equalTo: baseView.rightAnchor, constant: -Dimens.shared.spaceNormal).isActive = true
+        self.searchTextField.heightAnchor.constraint(equalToConstant: searchTextFieldHeight).isActive = true
+    }
+    
+    func constraintTableView() {
+        //self.tableView.anchor(top: self.searchTextField.bottomAnchor, left: self.baseView.leftAnchor, bottom: nil, right: self.baseView.rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: Dimens.shared.spaceNormal, paddingBottom: 0, paddingRight: Dimens.shared.spaceNormal, width: 0, height: 0, enableInsets: false)
+        self.tableView.translatesAutoresizingMaskIntoConstraints = false
+        self.tableView.topAnchor.constraint(equalTo: searchTextField.bottomAnchor, constant: Dimens.shared.spaceNormal).isActive = true
+        self.tableView.leftAnchor.constraint(equalTo: baseView.leftAnchor, constant: Dimens.shared.spaceNormal).isActive = true
+        self.tableView.rightAnchor.constraint(equalTo: baseView.rightAnchor, constant: -Dimens.shared.spaceNormal).isActive = true
+    }
+    
+    func constraintColletionView() {
+        //self.collectionView.anchor(top: self.tableView.bottomAnchor, left: self.baseView.leftAnchor, bottom: self.baseView.bottomAnchor, right: self.baseView.rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: 0, paddingBottom: (Dimens.shared.spaceNormal / 2), paddingRight: 0, width: 0, height: colletionViewHeight, enableInsets: false)
+        self.collectionView.translatesAutoresizingMaskIntoConstraints = false
+        self.collectionView.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: Dimens.shared.spaceNormal).isActive = true
+        self.collectionView.leftAnchor.constraint(equalTo: baseView.leftAnchor, constant: 0).isActive = true
+        self.collectionView.rightAnchor.constraint(equalTo: baseView.rightAnchor, constant: 0).isActive = true
+        self.collectionView.bottomAnchor.constraint(equalTo: baseView.bottomAnchor, constant: -(Dimens.shared.spaceNormal / 2)).isActive = true
+        self.collectionView.heightAnchor.constraint(equalToConstant: colletionViewHeight).isActive = true
+    }
+    
+    func constraintTableViewEmptyLabel() {
+        //self.tableViewEmptyLabel.anchor(top: self.searchTextField.bottomAnchor, left: self.baseView.leftAnchor, bottom: nil, right: self.baseView.rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: Dimens.shared.spaceNormal, paddingBottom: 0, paddingRight: Dimens.shared.spaceNormal, width: 0, height: 0, enableInsets: false)
+        self.tableViewEmptyLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.tableViewEmptyLabel.topAnchor.constraint(equalTo: searchTextField.bottomAnchor, constant: Dimens.shared.spaceNormal).isActive = true
+        self.tableViewEmptyLabel.leftAnchor.constraint(equalTo: baseView.leftAnchor, constant: Dimens.shared.spaceNormal).isActive = true
+        self.tableViewEmptyLabel.rightAnchor.constraint(equalTo: baseView.rightAnchor, constant: -Dimens.shared.spaceNormal).isActive = true
     }
 }

@@ -8,7 +8,7 @@
 import UIKit
 extension UIView {
     
-    func anchor (top: NSLayoutYAxisAnchor?, left: NSLayoutXAxisAnchor?, bottom: NSLayoutYAxisAnchor?, right: NSLayoutXAxisAnchor?, paddingTop: CGFloat, paddingLeft: CGFloat, paddingBottom: CGFloat, paddingRight: CGFloat, width: CGFloat, height: CGFloat, enableInsets: Bool) {
+    /*func anchor (top: NSLayoutYAxisAnchor?, left: NSLayoutXAxisAnchor?, bottom: NSLayoutYAxisAnchor?, right: NSLayoutXAxisAnchor?, paddingTop: CGFloat, paddingLeft: CGFloat, paddingBottom: CGFloat, paddingRight: CGFloat, width: CGFloat, height: CGFloat, enableInsets: Bool) {
         var topInset = CGFloat(0)
         var bottomInset = CGFloat(0)
         
@@ -42,7 +42,7 @@ extension UIView {
             widthAnchor.constraint(equalToConstant: width).isActive = true
         }
         
-    }
+    }*/
     
     public func addViewBorder(borderColor:CGColor, borderWith:CGFloat, borderCornerRadius:CGFloat){
         self.layer.borderWidth = borderWith

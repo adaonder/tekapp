@@ -42,9 +42,7 @@ class SearchTableViewCell: UITableViewCell {
         addSubview(searchTitle)
         addSubview(searchYear)
         
-        searchPoster.anchor(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: nil, paddingTop: Dimens.shared.spaceSmall, paddingLeft:  0, paddingBottom:  Dimens.shared.spaceSmall, paddingRight: 0, width: 90, height: 0, enableInsets: false)
-        searchTitle.anchor(top: topAnchor, left: searchPoster.rightAnchor, bottom: nil, right: rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0, enableInsets: false)
-        searchYear.anchor(top: searchTitle.bottomAnchor, left: searchPoster.rightAnchor, bottom: nil, right: nil, paddingTop: Dimens.shared.spaceNormal, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0, enableInsets: false)
+        setConstraints()
     }
     
     required init?(coder: NSCoder) {
@@ -67,5 +65,33 @@ class SearchTableViewCell: UITableViewCell {
             searchPoster.image = UIImage(named: Images.shared.avatar)
         }
         
+    }
+    
+    func setConstraints() {
+        constraintSearchPoster()
+        constraintSearchTitle()
+        constraintSearchPlot()
+    }
+    
+    func constraintSearchPoster() {
+        //searchPoster.anchor(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: nil, paddingTop: Dimens.shared.spaceSmall, paddingLeft:  0, paddingBottom:  Dimens.shared.spaceSmall, paddingRight: 0, width: 90, height: 0, enableInsets: false)
+        self.searchPoster.translatesAutoresizingMaskIntoConstraints = false
+        self.searchPoster.topAnchor.constraint(equalTo: self.topAnchor, constant: Dimens.shared.spaceSmall).isActive = true
+        self.searchPoster.leftAnchor.constraint(equalTo:  self.leftAnchor, constant: 0).isActive = true
+        self.searchPoster.bottomAnchor.constraint(equalTo:  self.bottomAnchor, constant: -Dimens.shared.spaceSmall).isActive = true
+        self.searchPoster.widthAnchor.constraint(equalToConstant: 90).isActive = true
+    }
+    func constraintSearchTitle() {
+        //searchTitle.anchor(top: topAnchor, left: searchPoster.rightAnchor, bottom: nil, right: rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0, enableInsets: false)
+        self.searchTitle.translatesAutoresizingMaskIntoConstraints = false
+        self.searchTitle.topAnchor.constraint(equalTo: self.topAnchor, constant: Dimens.shared.spaceNormal).isActive = true
+        self.searchTitle.leftAnchor.constraint(equalTo:  self.searchPoster.rightAnchor, constant: 0).isActive = true
+        self.searchTitle.rightAnchor.constraint(equalTo:  self.rightAnchor, constant: 0).isActive = true
+    }
+    func constraintSearchPlot() {
+        //searchYear.anchor(top: searchTitle.bottomAnchor, left: searchPoster.rightAnchor, bottom: nil, right: nil, paddingTop: Dimens.shared.spaceNormal, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0, enableInsets: false)
+        self.searchYear.translatesAutoresizingMaskIntoConstraints = false
+        self.searchYear.topAnchor.constraint(equalTo: self.searchTitle.bottomAnchor, constant: Dimens.shared.spaceNormal).isActive = true
+        self.searchYear.leftAnchor.constraint(equalTo:  self.searchPoster.rightAnchor, constant: 0).isActive = true
     }
 }

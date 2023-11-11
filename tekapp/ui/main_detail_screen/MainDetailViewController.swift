@@ -66,10 +66,33 @@ class MainDetailViewController: BaseViewController {
     }
     
     func setConstraints() {
+        constraintSearchPoster()
+        constraintSearchTitle()
+        constraintSearchPlot()
+    }
+    
+    func constraintSearchPoster() {
         let displayHeight: CGFloat = self.view.frame.height
-        searchPoster.anchor(top: self.baseView.topAnchor, left: self.baseView.leftAnchor, bottom: nil, right: self.baseView.rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: Dimens.shared.spaceNormal, paddingBottom: 0, paddingRight: Dimens.shared.spaceNormal, width: 0, height: displayHeight / 4, enableInsets: false)
-        searchTitle.anchor(top: self.searchPoster.bottomAnchor, left: self.baseView.leftAnchor, bottom: nil, right: self.baseView.rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: Dimens.shared.spaceNormal, paddingBottom: 0, paddingRight: Dimens.shared.spaceNormal, width: 0, height: 0, enableInsets: false)
-        searchPlot.anchor(top: self.searchTitle.bottomAnchor, left: self.baseView.leftAnchor, bottom: nil, right: self.baseView.rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: Dimens.shared.spaceNormal, paddingBottom: 0, paddingRight: Dimens.shared.spaceNormal, width: 0, height: 0, enableInsets: false)
+        //searchPoster.anchor(top: self.baseView.topAnchor, left: self.baseView.leftAnchor, bottom: nil, right: self.baseView.rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: Dimens.shared.spaceNormal, paddingBottom: 0, paddingRight: Dimens.shared.spaceNormal, width: 0, height: displayHeight / 4, enableInsets: false)
+        self.searchPoster.translatesAutoresizingMaskIntoConstraints = false
+        self.searchPoster.topAnchor.constraint(equalTo: self.baseView.topAnchor, constant: Dimens.shared.spaceNormal).isActive = true
+        self.searchPoster.leftAnchor.constraint(equalTo:  self.baseView.leftAnchor, constant: Dimens.shared.spaceNormal).isActive = true
+        self.searchPoster.rightAnchor.constraint(equalTo:  self.baseView.rightAnchor, constant: -Dimens.shared.spaceNormal).isActive = true
+        self.searchPoster.heightAnchor.constraint(equalToConstant: displayHeight / 4).isActive = true
+    }
+    func constraintSearchTitle() {
+        //searchTitle.anchor(top: self.searchPoster.bottomAnchor, left: self.baseView.leftAnchor, bottom: nil, right: self.baseView.rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: Dimens.shared.spaceNormal, paddingBottom: 0, paddingRight: Dimens.shared.spaceNormal, width: 0, height: 0, enableInsets: false)
+        self.searchTitle.translatesAutoresizingMaskIntoConstraints = false
+        self.searchTitle.topAnchor.constraint(equalTo: self.searchPoster.bottomAnchor, constant: Dimens.shared.spaceNormal).isActive = true
+        self.searchTitle.leftAnchor.constraint(equalTo:  self.baseView.leftAnchor, constant: Dimens.shared.spaceNormal).isActive = true
+        self.searchTitle.rightAnchor.constraint(equalTo:  self.baseView.rightAnchor, constant: -Dimens.shared.spaceNormal).isActive = true
+    }
+    func constraintSearchPlot() {
+        //searchPlot.anchor(top: self.searchTitle.bottomAnchor, left: self.baseView.leftAnchor, bottom: nil, right: self.baseView.rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: Dimens.shared.spaceNormal, paddingBottom: 0, paddingRight: Dimens.shared.spaceNormal, width: 0, height: 0, enableInsets: false)
+        self.searchPlot.translatesAutoresizingMaskIntoConstraints = false
+        self.searchPlot.topAnchor.constraint(equalTo: self.searchTitle.bottomAnchor, constant: Dimens.shared.spaceNormal).isActive = true
+        self.searchPlot.leftAnchor.constraint(equalTo:  self.baseView.leftAnchor, constant: Dimens.shared.spaceNormal).isActive = true
+        self.searchPlot.rightAnchor.constraint(equalTo:  self.baseView.rightAnchor, constant: -Dimens.shared.spaceNormal).isActive = true
     }
     
     func updateUI() {
