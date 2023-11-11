@@ -263,9 +263,8 @@ extension MainViewController: UITableViewDataSourcePrefetching {
 
 extension MainViewController {
     func initSearchTextField() {
-        let displayWidth: CGFloat = self.view.frame.width
-        
-        searchTextField = UITextField(frame: CGRect(x: 0, y: 0, width: displayWidth, height: searchTextFieldHeight))
+        searchTextField = UITextField()
+        searchTextField.delegate = self
         searchTextField.font = UIFont.systemFont(ofSize: searchTextFieldTextSize)
         searchTextField.borderStyle = UITextField.BorderStyle.roundedRect
         searchTextField.backgroundColor = .white
@@ -275,24 +274,15 @@ extension MainViewController {
             attributes: [NSAttributedString.Key.foregroundColor: UIColor.black]
         )
         searchTextField.contentVerticalAlignment = UIControl.ContentVerticalAlignment.center
-        searchTextField.delegate = self
     }
     
     func initTableView() {
-        let displayWidth: CGFloat = self.view.frame.width
-        let displayHeight: CGFloat = self.view.frame.height
-        let tableViewHeight = displayHeight - colletionViewHeight - (2 * Dimens.shared.spaceNormal)
-        
-        self.tableView = UITableView(frame: CGRect(x: 0, y: 0, width: displayWidth, height: tableViewHeight))
-        self.tableView.register(SearchTableViewCell.self, forCellReuseIdentifier: SearchTableViewCell.reuseIdentifier)
-        
+        self.tableView = UITableView()
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.tableView.prefetchDataSource = self
-        
-        let spinner = UIActivityIndicatorView(style: .white)
-        spinner.frame = CGRect(x: CGFloat(0), y: CGFloat(0), width: self.tableView.bounds.width, height: CGFloat(50))
-        self.tableView.tableFooterView = spinner
+        self.tableView.register(SearchTableViewCell.self, forCellReuseIdentifier: SearchTableViewCell.reuseIdentifier)
+        self.tableView.tableFooterView = UIActivityIndicatorView(style: .white)
     }
     
     func initCollectionView() {
@@ -304,18 +294,15 @@ extension MainViewController {
         flowLayout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         flowLayout.scrollDirection = .horizontal
         flowLayout.minimumInteritemSpacing = 0.0
-        collectionView = UICollectionView(frame: self.view.bounds, collectionViewLayout: flowLayout)
-        collectionView.register(SearchCollectionViewCell.self, forCellWithReuseIdentifier: SearchCollectionViewCell.reuseIdentifier)
-        
+        collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: flowLayout)
         collectionView.dataSource = self
+        collectionView.register(SearchCollectionViewCell.self, forCellWithReuseIdentifier: SearchCollectionViewCell.reuseIdentifier)
         collectionView.backgroundColor = UIColor.black
         collectionView.addViewBorder(borderColor: UIColor.gray.cgColor, borderWith: 1, borderCornerRadius: 0)
     }
     
     func initTableViewEmptyLabel() {
-        let displayWidth: CGFloat = self.view.frame.width
-        
-        tableViewEmptyLabel =  UILabel(frame: CGRect(x: 0, y: 0, width: displayWidth, height: searchTextFieldHeight))
+        tableViewEmptyLabel = UILabel()
         tableViewEmptyLabel.font = UIFont.systemFont(ofSize: searchTextFieldTextSize)
         tableViewEmptyLabel.textColor = .white
         tableViewEmptyLabel.textAlignment = .center

@@ -36,7 +36,6 @@ class SearchTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
         backgroundColor = .black
         
         addSubview(searchPoster)
@@ -46,7 +45,6 @@ class SearchTableViewCell: UITableViewCell {
         searchPoster.anchor(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: nil, paddingTop: Dimens.shared.spaceSmall, paddingLeft:  0, paddingBottom:  Dimens.shared.spaceSmall, paddingRight: 0, width: 90, height: 0, enableInsets: false)
         searchTitle.anchor(top: topAnchor, left: searchPoster.rightAnchor, bottom: nil, right: rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0, enableInsets: false)
         searchYear.anchor(top: searchTitle.bottomAnchor, left: searchPoster.rightAnchor, bottom: nil, right: nil, paddingTop: Dimens.shared.spaceNormal, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0, enableInsets: false)
-        
     }
     
     required init?(coder: NSCoder) {
