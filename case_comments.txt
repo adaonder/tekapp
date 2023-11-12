@@ -1,0 +1,16 @@
+Case Yorumları: 
+
+*Cell viewcontroller gibi generic ne olduğu pek anlaşılmayan file ve class isimleri mevcut.
+*CVC, TVC, MV vb kodun okunurluğunu azaltan ve proje büyüdükçe search konusunda sıkıntı çıkartacak kısaltmalar mevcut.
+*UI elemanlarına ihtiyaç olmayan özellikler set edilmiş.
+*Olmaması gerektiğini özellikle belirtmemize rağmen storyboard kullanımı mevcut Appdelegate veya SceneDelegate üzerinden initialize yapılmamış mainstoryboard üzerinden başlıyor proje. 
+*2 servise aynı anda istek atıp ikisi de success olunca reloadData olacaktı. Burada 1.servis success olunca 2.si çağırılmış.
+*MVVM kullanılmış ama doğru bir kullanım değil.
+*UI elementler, constraint ve frame set olarak 2 farklı yöntem ile ekranlara eklenmiş. Standart yok.
+*Bazı constraintleri extension ile vermiş (anchor methodu), bazılırını ise UIKit'in methodu ile vermiş. Standart yok.
+*Image Cache olması gerektiği gibi değil. Her cell için ViewModel tanımlanmış, cached image'lar ViewModel'ler içerisinde tutulmulş.
+*Detay ekranları present edilmiş. Push edilmesi daha mantıklı.
+*Dimens, DEVICE_TOP_PADDING vs. gibi class ve değişken var ama ne işe yaradıklarını commet olarak belirtilse iyi olurmuş.
+*Viewlarda lazy kullanımı mevcut değil. 
+*Mark, final vb. Nice to have kullanımlar mevcut değil.
+*Force cast çokca var. Methodlar, classlar arası boşluklar falan standart değil.
