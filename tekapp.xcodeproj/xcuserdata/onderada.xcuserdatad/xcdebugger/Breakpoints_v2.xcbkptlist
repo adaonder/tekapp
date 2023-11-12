@@ -3,4 +3,99 @@
    uuid = "99FCF90B-5F7D-4F16-80AB-AC40B19A4BCF"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "356116C0-2B36-46A0-AFDF-10774043EA8D"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "tekapp/ui/main_screen/view_cells/SearchTableViewCell.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "14"
+            endingLineNumber = "14"
+            landmarkName = "searchPoster"
+            landmarkType = "24">
+            <Locations>
+               <Location
+                  uuid = "356116C0-2B36-46A0-AFDF-10774043EA8D - 90e3b152a0dad976"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "tekapp.SearchTableViewCell.searchPoster.getter : __C.UIImageView"
+                  moduleName = "tekapp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Volumes/disk2/globmeios/tekapp/tekapp/ui/main_screen/view_cells/SearchTableViewCell.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "14"
+                  endingLineNumber = "14"
+                  offsetFromSymbolStart = "152">
+               </Location>
+               <Location
+                  uuid = "356116C0-2B36-46A0-AFDF-10774043EA8D - 31620c9ca017e8e7"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; __C.UIImageView in tekapp.SearchTableViewCell.searchPoster.getter : __C.UIImageView"
+                  moduleName = "tekapp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Volumes/disk2/globmeios/tekapp/tekapp/ui/main_screen/view_cells/SearchTableViewCell.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "15"
+                  endingLineNumber = "15"
+                  offsetFromSymbolStart = "24">
+               </Location>
+               <Location
+                  uuid = "356116C0-2B36-46A0-AFDF-10774043EA8D - 84f0af04c0a0f14e"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "tekapp.SearchTableViewCell.searchPoster.setter : __C.UIImageView"
+                  moduleName = "tekapp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Volumes/disk2/globmeios/tekapp/tekapp/ui/main_screen/view_cells/SearchTableViewCell.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "14"
+                  endingLineNumber = "14"
+                  offsetFromSymbolStart = "0">
+               </Location>
+               <Location
+                  uuid = "356116C0-2B36-46A0-AFDF-10774043EA8D - bb931a851ddd4370"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "tekapp.SearchTableViewCell.searchPoster.modify : __C.UIImageView"
+                  moduleName = "tekapp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Volumes/disk2/globmeios/tekapp/tekapp/ui/main_screen/view_cells/SearchTableViewCell.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "14"
+                  endingLineNumber = "14"
+                  offsetFromSymbolStart = "0">
+               </Location>
+               <Location
+                  uuid = "356116C0-2B36-46A0-AFDF-10774043EA8D - 61d0bcb9ae9622ac"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "tekapp.SearchTableViewCell.searchPoster.modify : __C.UIImageView with unmangled suffix &quot;.resume.0&quot;"
+                  moduleName = "tekapp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Volumes/disk2/globmeios/tekapp/%3Ccompiler-generated%3E"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "20">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

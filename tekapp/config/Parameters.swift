@@ -7,14 +7,14 @@
 
 import Foundation
 
-
-public class Parameters{
+///Genel sabit stringlere ulaşmak için yazıldı.
+final public class Parameters{
     
+    //MARK: API ENDPOINT
     public static var API_URL = "https://www.omdbapi.com/?apikey=d4bbe46"
     public static var API_ENDPOINT_SEARCH = "&s=%@&page=%@"
     public static var API_ENDPOINT_DETAIL = "&i=%@"
-    public static let LOTTIE_LOADING: String = "loading"
     
-    
+    //MARK: API RESPONSE
     public static let responseSuccess = "True"
 }

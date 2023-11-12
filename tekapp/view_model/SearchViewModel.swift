@@ -9,32 +9,34 @@ import Foundation
 
 
 final class SearchViewModel {
+    
+    //MARK: Properties
     weak var delegate: SearchRequestProtocol?
     private var searchViewModelData: SearchViewModelData {
         didSet {
             switch searchViewModelData.searchListViewType {
-            case .multi: 
+            case .multi:
                 self.delegate?.didInitUpdate(with: searchViewModelData.state)
                 break
-            case .searchTableView: 
+            case .searchTableView:
                 self.delegate?.didTableViewUpdate(with: searchViewModelData.state)
                 break
-            case .searchColletionView: 
+            case .searchColletionView:
                 self.delegate?.didColletionUpdate(with: searchViewModelData.state)
                 break
             }
         }
     }
-    
+    private var defaultSearchText = "Star"
+    private let defaultSearchCollectionText = "Comedy"
+    private var oldRequestPath : String? = nil
     var tableViewList = [SearchCellViewModel]()
     var collectionViewList = [SearchCellViewModel]()
-    var defaultSearchText = "Star"
-    let defaultSearchCollectionText = "Comedy"
     var tableViewPage:Int = 1
-    var tableViewTotalResults:Int = 0
     var collectionPage:Int = 1
+    var tableViewTotalResults:Int = 0
     var collectionTotalResults:Int = 0
-    var oldRequestPath : String? = nil
+    
     
     init() {
         self.searchViewModelData = SearchViewModelData(state: .idle)

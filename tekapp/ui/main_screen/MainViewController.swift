@@ -7,26 +7,33 @@
 
 import UIKit
 
-class MainViewController: BaseViewController {
-    var searchText = "Star"
-    lazy var searchViewModel: SearchViewModel = {
+final class MainViewController: BaseViewController {
+    
+    //MARK: Properties
+    private var searchText = "Star"
+    lazy final var searchViewModel: SearchViewModel = {
         return SearchViewModel()
     }()
     
     private var searchTextFieldTextSize: CGFloat = 15
     private var searchTextFieldHeight: CGFloat = 50
-    let screenSize: CGRect = UIScreen.main.bounds
-    let tableViewCellHight: CGFloat = 100.0
-    var colletionViewHeight: CGFloat = 0
-    var isSearchTableViewLoading = false
-    var isTableViewLoading = false
-    var isColletionViewLoading = false
-    var searchEditEndTimer: Timer? = nil
-    var searchTextField:  UITextField!
-    var tableViewEmptyLabel:  UILabel!
-    var tableView: UITableView!
-    var collectionView: UICollectionView!
+    private let screenSize: CGRect = UIScreen.main.bounds
+    private let tableViewCellHight: CGFloat = 100.0
+    private var colletionViewHeight: CGFloat = 0
+    private var isSearchTableViewLoading = false
+    private var isTableViewLoading = false
+    private var isColletionViewLoading = false
+    private var searchEditEndTimer: Timer? = nil
     
+    //Views
+    lazy var searchTextField: UITextField? = nil
+    lazy var tableViewEmptyLabel: UILabel? = nil
+    lazy var tableView: UITableView? = nil
+    lazy var collectionView: UICollectionView? = nil
+    lazy var tableViewFooterIndicatorView: UIActivityIndicatorView? = nil
+    
+    
+    //MARK: Functions
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: animated)
@@ -54,27 +61,31 @@ class MainViewController: BaseViewController {
         self.searchViewModel.getInitSearchData(searchText)
     }
     
-    func tableViewLoadNextData() {
+    private func tableViewLoadNextData() {
         self.searchViewModel.tableViewPage += 1
         self.searchViewModel.getSearchTextData(self.searchText, false)
     }
     
-    func colletionViewLoadNextData() {
+    private func colletionViewLoadNextData() {
         self.searchViewModel.collectionPage += 1
         self.searchViewModel.getSearchComedyData()
     }
     
-    func startUpdateListAnim(_ view: UIView) {
-        view.isHidden = false
-        (view as! UIActivityIndicatorView).startAnimating()
+    private func startUpdateListAnim(_ view: UIActivityIndicatorView?) {
+        if let view = view {
+            view.isHidden = false
+            view.startAnimating()
+        }
     }
     
-    func stopUpdateListAnim(_ view: UIView) {
-        (view as! UIActivityIndicatorView).stopAnimating()
-        view.isHidden = true
+    private func stopUpdateListAnim(_ view: UIActivityIndicatorView?) {
+        if let view = view {
+            view.isHidden = true
+            view.stopAnimating()
+        }
     }
     
-    func startSearchText(_ text: String) {
+    private func startSearchText(_ text: String) {
         if(self.searchEditEndTimer != nil) {
             self.searchEditEndTimer!.invalidate()
         }
@@ -88,7 +99,7 @@ class MainViewController: BaseViewController {
     }
 }
 
-//SearchRequestDelegate
+//MARK: SearchRequestProtocol
 extension MainViewController : SearchRequestProtocol {
     func didInitUpdate(with state: ViewState) {
         DispatchQueue.main.async {
@@ -102,8 +113,8 @@ extension MainViewController : SearchRequestProtocol {
             case .success:
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                     DialogUtil.shared.hideLoading()
-                    self.tableView.reloadData()
-                    self.collectionView.reloadData()
+                    self.tableView?.reloadData()
+                    self.collectionView?.reloadData()
                 }
             case .error(let error):
                 DialogUtil.shared.hideLoading()
@@ -121,22 +132,22 @@ extension MainViewController : SearchRequestProtocol {
                 break
             case .loading:
                 isTableViewLoading = true
-                self.startUpdateListAnim(self.tableView.tableFooterView!)
-                self.tableViewEmptyLabel.isHidden = true
+                self.startUpdateListAnim(self.tableViewFooterIndicatorView)
+                self.tableViewEmptyLabel?.isHidden = true
             case .success:
                 self.isTableViewLoading = false
-                self.tableView.reloadData()
-                self.stopUpdateListAnim(self.tableView.tableFooterView!)
+                self.tableView?.reloadData()
+                self.stopUpdateListAnim(self.tableViewFooterIndicatorView)
                 if(self.searchViewModel.tableViewList.isEmpty) {
-                    self.tableViewEmptyLabel.isHidden = false
+                    self.tableViewEmptyLabel?.isHidden = false
                 }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                     self.isSearchTableViewLoading = false
                 }
             case .error(_):
                 self.isTableViewLoading = false
-                self.stopUpdateListAnim(self.tableView.tableFooterView!)
-                self.tableViewEmptyLabel.isHidden = false
+                self.stopUpdateListAnim(self.tableViewFooterIndicatorView)
+                self.tableViewEmptyLabel?.isHidden = false
             }
         }
     }
@@ -152,7 +163,7 @@ extension MainViewController : SearchRequestProtocol {
                 isColletionViewLoading = true
             case .success:
                 self.isColletionViewLoading = false
-                self.collectionView.reloadData()
+                self.collectionView?.reloadData()
             case .error(let error):
                 self.isColletionViewLoading = false
                 DialogUtil.shared.showMessage(self, "error".localized(), error)
@@ -161,8 +172,7 @@ extension MainViewController : SearchRequestProtocol {
     }
 }
 
-
-//TextField
+//MARK: TextFieldDelegate
 extension MainViewController : UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
@@ -182,27 +192,24 @@ extension MainViewController : UITextFieldDelegate {
     }
 }
 
-
-
-//TableView
+//MARK: TableView Delegate DataSource
 extension MainViewController : UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return searchViewModel.tableViewList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: SearchTableViewCell.reuseIdentifier, for: indexPath) as! SearchTableViewCell
-        
-        if searchViewModel.tableViewList.count > indexPath.row {
-            let clockRecord = searchViewModel.tableViewList[indexPath.row]
-            cell.setCell(clockRecord)
+        if let searchTableViewCell = tableView.dequeueReusableCell(withIdentifier: SearchTableViewCell.reuseIdentifier, for: indexPath) as? SearchTableViewCell {
+            if searchViewModel.tableViewList.count > indexPath.row {
+                let clockRecord = searchViewModel.tableViewList[indexPath.row]
+                searchTableViewCell.setCell(clockRecord)
+            }
+            if indexPath.row == searchViewModel.tableViewList.count - 1, searchViewModel.tableViewPage <= searchViewModel.tableViewTotalResults, isTableViewLoading == false, isSearchTableViewLoading == false {
+                tableViewLoadNextData()
+            }
+            return searchTableViewCell
         }
-        
-        if indexPath.row == searchViewModel.tableViewList.count - 1, searchViewModel.tableViewPage <= searchViewModel.tableViewTotalResults, isTableViewLoading == false, isSearchTableViewLoading == false {
-            tableViewLoadNextData()
-        }
-        
-        return cell
+        return UITableViewCell()
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -219,36 +226,7 @@ extension MainViewController : UITableViewDelegate {
     }
 }
 
-
-//CollectionView
-extension MainViewController : UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int
-    {
-        return self.searchViewModel.collectionViewList.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
-    {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchCollectionViewCell.reuseIdentifier, for: indexPath) as! SearchCollectionViewCell
-        cell.backgroundColor = UIColor.black
-        
-        if searchViewModel.collectionViewList.count > indexPath.row {
-            let clockRecord = searchViewModel.collectionViewList[indexPath.row]
-            cell.setCell(clockRecord)
-        }
-        
-        if indexPath.row == searchViewModel.collectionViewList.count - 1, searchViewModel.collectionPage <= searchViewModel.collectionTotalResults, isColletionViewLoading == false {
-            self.colletionViewLoadNextData()
-        }
-        
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
-    }
-}
-
+//MARK: TableViewDataSourcePrefetching
 extension MainViewController: UITableViewDataSourcePrefetching {
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         
@@ -261,28 +239,58 @@ extension MainViewController: UITableViewDataSourcePrefetching {
     }
 }
 
+//MARK: CollectionView DataSource
+extension MainViewController : UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int
+    {
+        return self.searchViewModel.collectionViewList.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
+    {
+        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchCollectionViewCell.reuseIdentifier, for: indexPath) as? SearchCollectionViewCell {
+            cell.backgroundColor = UIColor.black
+            if searchViewModel.collectionViewList.count > indexPath.row {
+                let clockRecord = searchViewModel.collectionViewList[indexPath.row]
+                cell.setCell(clockRecord)
+            }
+            if indexPath.row == searchViewModel.collectionViewList.count - 1, searchViewModel.collectionPage <= searchViewModel.collectionTotalResults, isColletionViewLoading == false {
+                self.colletionViewLoadNextData()
+            }
+            return cell
+        }
+        return UICollectionViewCell()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+}
+
+//MARK: Init Views Functions
 extension MainViewController {
-    func initSearchTextField() {
+    private func initSearchTextField() {
         searchTextField = UITextField()
-        searchTextField.delegate = self
-        searchTextField.font = UIFont.systemFont(ofSize: searchTextFieldTextSize)
-        searchTextField.borderStyle = UITextField.BorderStyle.roundedRect
-        searchTextField.backgroundColor = .white
-        searchTextField.textColor = .black
-        searchTextField.attributedPlaceholder = NSAttributedString(
+        searchTextField?.delegate = self
+        searchTextField?.font = UIFont.systemFont(ofSize: searchTextFieldTextSize)
+        searchTextField?.borderStyle = UITextField.BorderStyle.roundedRect
+        searchTextField?.backgroundColor = .white
+        searchTextField?.textColor = .black
+        searchTextField?.attributedPlaceholder = NSAttributedString(
             string: "search".localized(),
             attributes: [NSAttributedString.Key.foregroundColor: UIColor.black]
         )
-        searchTextField.contentVerticalAlignment = UIControl.ContentVerticalAlignment.center
+        searchTextField?.contentVerticalAlignment = UIControl.ContentVerticalAlignment.center
     }
     
-    func initTableView() {
+    private func initTableView() {
         self.tableView = UITableView()
-        self.tableView.delegate = self
-        self.tableView.dataSource = self
-        self.tableView.prefetchDataSource = self
-        self.tableView.register(SearchTableViewCell.self, forCellReuseIdentifier: SearchTableViewCell.reuseIdentifier)
-        self.tableView.tableFooterView = UIActivityIndicatorView(style: .white)
+        self.tableView?.delegate = self
+        self.tableView?.dataSource = self
+        self.tableView?.prefetchDataSource = self
+        self.tableView?.register(SearchTableViewCell.self, forCellReuseIdentifier: SearchTableViewCell.reuseIdentifier)
+        tableViewFooterIndicatorView = UIActivityIndicatorView(style: .white)
+        self.tableView?.tableFooterView = tableViewFooterIndicatorView
     }
     
     func initCollectionView() {
@@ -295,29 +303,37 @@ extension MainViewController {
         flowLayout.scrollDirection = .horizontal
         flowLayout.minimumInteritemSpacing = 0.0
         collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: flowLayout)
-        collectionView.dataSource = self
-        collectionView.register(SearchCollectionViewCell.self, forCellWithReuseIdentifier: SearchCollectionViewCell.reuseIdentifier)
-        collectionView.backgroundColor = UIColor.black
-        collectionView.addViewBorder(borderColor: UIColor.gray.cgColor, borderWith: 1, borderCornerRadius: 0)
+        collectionView?.dataSource = self
+        collectionView?.register(SearchCollectionViewCell.self, forCellWithReuseIdentifier: SearchCollectionViewCell.reuseIdentifier)
+        collectionView?.backgroundColor = UIColor.black
+        collectionView?.addViewBorder(borderColor: UIColor.gray.cgColor, borderWith: 1, borderCornerRadius: 0)
     }
     
-    func initTableViewEmptyLabel() {
+    private func initTableViewEmptyLabel() {
         tableViewEmptyLabel = UILabel()
-        tableViewEmptyLabel.font = UIFont.systemFont(ofSize: searchTextFieldTextSize)
-        tableViewEmptyLabel.textColor = .white
-        tableViewEmptyLabel.textAlignment = .center
-        tableViewEmptyLabel.text = "no_search_data".localized()
-        tableViewEmptyLabel.isHidden = true
+        tableViewEmptyLabel?.font = UIFont.systemFont(ofSize: searchTextFieldTextSize)
+        tableViewEmptyLabel?.textColor = .white
+        tableViewEmptyLabel?.textAlignment = .center
+        tableViewEmptyLabel?.text = "no_search_data".localized()
+        tableViewEmptyLabel?.isHidden = true
     }
     
-    func addViews() {
-        self.baseView.addSubview(self.searchTextField)
-        self.baseView.addSubview(self.tableView)
-        self.baseView.addSubview(self.collectionView)
-        self.baseView.addSubview(self.tableViewEmptyLabel)
+    private func addViews() {
+        if let searchTextField = self.searchTextField {
+            self.baseView.addSubview(searchTextField)
+        }
+        if let tableView = self.tableView {
+            self.baseView.addSubview(tableView)
+        }
+        if let collectionView = self.collectionView {
+            self.baseView.addSubview(collectionView)
+        }
+        if let tableViewEmptyLabel = self.tableViewEmptyLabel {
+            self.baseView.addSubview(tableViewEmptyLabel)
+        }
     }
     
-    func configureConstraint() {
+    private func configureConstraint() {
         //Standart olsun diye constraint'ler extension kullanılmadan yazıldı.
         self.constraintSearchTextField()
         self.constraintTableView()
@@ -325,38 +341,38 @@ extension MainViewController {
         self.constraintTableViewEmptyLabel()
     }
     
-    func constraintSearchTextField() {
-        //self.searchTextField.anchor(top: baseView.topAnchor, left: baseView.leftAnchor, bottom: nil, right: baseView.rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: Dimens.shared.spaceNormal, paddingBottom: 0, paddingRight: Dimens.shared.spaceNormal, width: 0, height: searchTextFieldHeight, enableInsets: false)
-        self.searchTextField.translatesAutoresizingMaskIntoConstraints = false
-        self.searchTextField.topAnchor.constraint(equalTo: baseView.topAnchor, constant: Dimens.shared.spaceNormal).isActive = true
-        self.searchTextField.leftAnchor.constraint(equalTo: baseView.leftAnchor, constant: Dimens.shared.spaceNormal).isActive = true
-        self.searchTextField.rightAnchor.constraint(equalTo: baseView.rightAnchor, constant: -Dimens.shared.spaceNormal).isActive = true
-        self.searchTextField.heightAnchor.constraint(equalToConstant: searchTextFieldHeight).isActive = true
+    private func constraintSearchTextField() {
+        //self.searchTextField?.anchor(top: baseView.topAnchor, left: baseView.leftAnchor, bottom: nil, right: baseView.rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: Dimens.shared.spaceNormal, paddingBottom: 0, paddingRight: Dimens.shared.spaceNormal, width: 0, height: searchTextFieldHeight, enableInsets: false)
+        self.searchTextField?.translatesAutoresizingMaskIntoConstraints = false
+        self.searchTextField?.topAnchor.constraint(equalTo: baseView.topAnchor, constant: Dimens.shared.spaceNormal).isActive = true
+        self.searchTextField?.leftAnchor.constraint(equalTo: baseView.leftAnchor, constant: Dimens.shared.spaceNormal).isActive = true
+        self.searchTextField?.rightAnchor.constraint(equalTo: baseView.rightAnchor, constant: -Dimens.shared.spaceNormal).isActive = true
+        self.searchTextField?.heightAnchor.constraint(equalToConstant: searchTextFieldHeight).isActive = true
     }
     
-    func constraintTableView() {
-        //self.tableView.anchor(top: self.searchTextField.bottomAnchor, left: self.baseView.leftAnchor, bottom: nil, right: self.baseView.rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: Dimens.shared.spaceNormal, paddingBottom: 0, paddingRight: Dimens.shared.spaceNormal, width: 0, height: 0, enableInsets: false)
-        self.tableView.translatesAutoresizingMaskIntoConstraints = false
-        self.tableView.topAnchor.constraint(equalTo: searchTextField.bottomAnchor, constant: Dimens.shared.spaceNormal).isActive = true
-        self.tableView.leftAnchor.constraint(equalTo: baseView.leftAnchor, constant: Dimens.shared.spaceNormal).isActive = true
-        self.tableView.rightAnchor.constraint(equalTo: baseView.rightAnchor, constant: -Dimens.shared.spaceNormal).isActive = true
+    private func constraintTableView() {
+        //self.tableView?.anchor(top: self.searchTextField?.bottomAnchor, left: self.baseView.leftAnchor, bottom: nil, right: self.baseView.rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: Dimens.shared.spaceNormal, paddingBottom: 0, paddingRight: Dimens.shared.spaceNormal, width: 0, height: 0, enableInsets: false)
+        self.tableView?.translatesAutoresizingMaskIntoConstraints = false
+        self.tableView?.topAnchor.constraint(equalTo: searchTextField?.bottomAnchor ?? baseView.topAnchor, constant: Dimens.shared.spaceNormal).isActive = true
+        self.tableView?.leftAnchor.constraint(equalTo: baseView.leftAnchor, constant: Dimens.shared.spaceNormal).isActive = true
+        self.tableView?.rightAnchor.constraint(equalTo: baseView.rightAnchor, constant: -Dimens.shared.spaceNormal).isActive = true
     }
     
-    func constraintColletionView() {
-        //self.collectionView.anchor(top: self.tableView.bottomAnchor, left: self.baseView.leftAnchor, bottom: self.baseView.bottomAnchor, right: self.baseView.rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: 0, paddingBottom: (Dimens.shared.spaceNormal / 2), paddingRight: 0, width: 0, height: colletionViewHeight, enableInsets: false)
-        self.collectionView.translatesAutoresizingMaskIntoConstraints = false
-        self.collectionView.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: Dimens.shared.spaceNormal).isActive = true
-        self.collectionView.leftAnchor.constraint(equalTo: baseView.leftAnchor, constant: 0).isActive = true
-        self.collectionView.rightAnchor.constraint(equalTo: baseView.rightAnchor, constant: 0).isActive = true
-        self.collectionView.bottomAnchor.constraint(equalTo: baseView.bottomAnchor, constant: -(Dimens.shared.spaceNormal / 2)).isActive = true
-        self.collectionView.heightAnchor.constraint(equalToConstant: colletionViewHeight).isActive = true
+    private func constraintColletionView() {
+        //self.collectionView?.anchor(top: self.tableView?.bottomAnchor, left: self.baseView.leftAnchor, bottom: self.baseView.bottomAnchor, right: self.baseView.rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: 0, paddingBottom: (Dimens.shared.spaceNormal / 2), paddingRight: 0, width: 0, height: colletionViewHeight, enableInsets: false)
+        self.collectionView?.translatesAutoresizingMaskIntoConstraints = false
+        self.collectionView?.topAnchor.constraint(equalTo: tableView?.bottomAnchor ?? baseView.topAnchor, constant: Dimens.shared.spaceNormal).isActive = true
+        self.collectionView?.leftAnchor.constraint(equalTo: baseView.leftAnchor, constant: 0).isActive = true
+        self.collectionView?.rightAnchor.constraint(equalTo: baseView.rightAnchor, constant: 0).isActive = true
+        self.collectionView?.bottomAnchor.constraint(equalTo: baseView.bottomAnchor, constant: -(Dimens.shared.spaceNormal / 2)).isActive = true
+        self.collectionView?.heightAnchor.constraint(equalToConstant: colletionViewHeight).isActive = true
     }
     
-    func constraintTableViewEmptyLabel() {
-        //self.tableViewEmptyLabel.anchor(top: self.searchTextField.bottomAnchor, left: self.baseView.leftAnchor, bottom: nil, right: self.baseView.rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: Dimens.shared.spaceNormal, paddingBottom: 0, paddingRight: Dimens.shared.spaceNormal, width: 0, height: 0, enableInsets: false)
-        self.tableViewEmptyLabel.translatesAutoresizingMaskIntoConstraints = false
-        self.tableViewEmptyLabel.topAnchor.constraint(equalTo: searchTextField.bottomAnchor, constant: Dimens.shared.spaceNormal).isActive = true
-        self.tableViewEmptyLabel.leftAnchor.constraint(equalTo: baseView.leftAnchor, constant: Dimens.shared.spaceNormal).isActive = true
-        self.tableViewEmptyLabel.rightAnchor.constraint(equalTo: baseView.rightAnchor, constant: -Dimens.shared.spaceNormal).isActive = true
+    private func constraintTableViewEmptyLabel() {
+        //self.tableViewEmptyLabel?.anchor(top: self.searchTextField?.bottomAnchor, left: self.baseView.leftAnchor, bottom: nil, right: self.baseView.rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: Dimens.shared.spaceNormal, paddingBottom: 0, paddingRight: Dimens.shared.spaceNormal, width: 0, height: 0, enableInsets: false)
+        self.tableViewEmptyLabel?.translatesAutoresizingMaskIntoConstraints = false
+        self.tableViewEmptyLabel?.topAnchor.constraint(equalTo: searchTextField?.bottomAnchor ?? baseView.topAnchor, constant: Dimens.shared.spaceNormal).isActive = true
+        self.tableViewEmptyLabel?.leftAnchor.constraint(equalTo: baseView.leftAnchor, constant: Dimens.shared.spaceNormal).isActive = true
+        self.tableViewEmptyLabel?.rightAnchor.constraint(equalTo: baseView.rightAnchor, constant: -Dimens.shared.spaceNormal).isActive = true
     }
 }

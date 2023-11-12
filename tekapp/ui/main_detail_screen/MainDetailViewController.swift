@@ -8,21 +8,22 @@
 import UIKit
 
 
-class MainDetailViewController: BaseViewController {
+final class MainDetailViewController: BaseViewController {
+    //MARK: Properties
     private var searchCellViewModel: SearchCellViewModel!
     
     lazy var searchDetailViewModel: SearchDetailViewModel = {
         return SearchDetailViewModel()
     }()
     
-    private let searchPoster : UIImageView = {
+    lazy private var searchPoster : UIImageView = {
         let imgView = UIImageView()
         imgView.contentMode = .scaleAspectFit
         imgView.clipsToBounds = true
         return imgView
     }()
     
-    private let searchTitle : UILabel = {
+    lazy private var searchTitle : UILabel = {
         let lbl = UILabel()
         lbl.textColor = .white
         lbl.font = UIFont.boldSystemFont(ofSize: Dimens.shared.textSizeTitle)
@@ -30,7 +31,7 @@ class MainDetailViewController: BaseViewController {
         return lbl
     }()
     
-    private let searchPlot : UILabel = {
+    lazy private var searchPlot : UILabel = {
         let lbl = UILabel()
         lbl.textColor = .white
         lbl.font = UIFont.systemFont(ofSize: Dimens.shared.textSizeNormal)
@@ -39,6 +40,7 @@ class MainDetailViewController: BaseViewController {
         return lbl
     }()
     
+    //MARK: Functions
     static func newIntance (_ searchCellViewModel: SearchCellViewModel) -> MainDetailViewController {
         let vc = MainDetailViewController()
         vc.searchCellViewModel = searchCellViewModel
@@ -59,19 +61,19 @@ class MainDetailViewController: BaseViewController {
         }
     }
     
-    func addViews() {
+    private func addViews() {
         self.baseView.addSubview(searchPoster)
         self.baseView.addSubview(searchTitle)
         self.baseView.addSubview(searchPlot)
     }
     
-    func setConstraints() {
+    private func setConstraints() {
         constraintSearchPoster()
         constraintSearchTitle()
         constraintSearchPlot()
     }
     
-    func constraintSearchPoster() {
+    private func constraintSearchPoster() {
         let displayHeight: CGFloat = self.view.frame.height
         //searchPoster.anchor(top: self.baseView.topAnchor, left: self.baseView.leftAnchor, bottom: nil, right: self.baseView.rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: Dimens.shared.spaceNormal, paddingBottom: 0, paddingRight: Dimens.shared.spaceNormal, width: 0, height: displayHeight / 4, enableInsets: false)
         self.searchPoster.translatesAutoresizingMaskIntoConstraints = false
@@ -80,14 +82,14 @@ class MainDetailViewController: BaseViewController {
         self.searchPoster.rightAnchor.constraint(equalTo:  self.baseView.rightAnchor, constant: -Dimens.shared.spaceNormal).isActive = true
         self.searchPoster.heightAnchor.constraint(equalToConstant: displayHeight / 4).isActive = true
     }
-    func constraintSearchTitle() {
+    private func constraintSearchTitle() {
         //searchTitle.anchor(top: self.searchPoster.bottomAnchor, left: self.baseView.leftAnchor, bottom: nil, right: self.baseView.rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: Dimens.shared.spaceNormal, paddingBottom: 0, paddingRight: Dimens.shared.spaceNormal, width: 0, height: 0, enableInsets: false)
         self.searchTitle.translatesAutoresizingMaskIntoConstraints = false
         self.searchTitle.topAnchor.constraint(equalTo: self.searchPoster.bottomAnchor, constant: Dimens.shared.spaceNormal).isActive = true
         self.searchTitle.leftAnchor.constraint(equalTo:  self.baseView.leftAnchor, constant: Dimens.shared.spaceNormal).isActive = true
         self.searchTitle.rightAnchor.constraint(equalTo:  self.baseView.rightAnchor, constant: -Dimens.shared.spaceNormal).isActive = true
     }
-    func constraintSearchPlot() {
+    private func constraintSearchPlot() {
         //searchPlot.anchor(top: self.searchTitle.bottomAnchor, left: self.baseView.leftAnchor, bottom: nil, right: self.baseView.rightAnchor, paddingTop: Dimens.shared.spaceNormal, paddingLeft: Dimens.shared.spaceNormal, paddingBottom: 0, paddingRight: Dimens.shared.spaceNormal, width: 0, height: 0, enableInsets: false)
         self.searchPlot.translatesAutoresizingMaskIntoConstraints = false
         self.searchPlot.topAnchor.constraint(equalTo: self.searchTitle.bottomAnchor, constant: Dimens.shared.spaceNormal).isActive = true
@@ -95,7 +97,7 @@ class MainDetailViewController: BaseViewController {
         self.searchPlot.rightAnchor.constraint(equalTo:  self.baseView.rightAnchor, constant: -Dimens.shared.spaceNormal).isActive = true
     }
     
-    func updateUI() {
+    private func updateUI() {
         if let poster = searchCellViewModel.search.Poster {
             self.searchCellViewModel.downloadImage(url: poster) { [weak self] image in
                 DispatchQueue.main.async {
@@ -108,7 +110,7 @@ class MainDetailViewController: BaseViewController {
         searchTitle.text = searchCellViewModel.search.Title ?? "-"
     }
     
-    func updateUIDetailText() {
+    private func updateUIDetailText() {
         self.searchPlot.text = self.searchDetailViewModel.searchDetail?.Plot ?? "-"
     }
     
@@ -117,7 +119,7 @@ class MainDetailViewController: BaseViewController {
     }
 }
 
-//SearchDetailRequestProtocol
+//MARK: SearchDetailRequestProtocol
 extension MainDetailViewController : SearchDetailRequestProtocol {
     func didUpdate(with state: ViewState) {
         DispatchQueue.main.async {

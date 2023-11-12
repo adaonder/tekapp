@@ -7,18 +7,19 @@
 
 import UIKit
 
-
 class BaseViewController: UIViewController {
-    let baseView = UIView()
+    //MARK: Properties
+    final let baseView = UIView()
     
+    //MARK: Functions
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .black
         self.hideKeyboardWhenTappedAround()
         self.initBaseView()
-        initViews()
-        setupViews()
-        initData()
+        self.initViews()
+        self.setupViews()
+        self.initData()
     }
     
     func initViews() { }

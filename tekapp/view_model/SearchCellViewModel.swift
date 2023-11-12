@@ -9,16 +9,19 @@ import Foundation
 import UIKit
 
 
-class SearchCellViewModel {
-    init(_ search : Search) {
-        self.search = search
-    }
-    
+final class SearchCellViewModel {
+    //MARK: Properties
     var search : Search!
     private var isDownloading = false
     private var cachedImage: UIImage?
     private var callback: ((UIImage?) -> Void)?
     
+    //MARK: Init
+    init(_ search : Search) {
+        self.search = search
+    }
+    
+    //MARK: Functions
     func downloadImage(url: String, completion: ((UIImage?) -> Void)?) {
         if let image = cachedImage {
             completion?(image)

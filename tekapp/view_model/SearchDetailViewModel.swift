@@ -9,6 +9,7 @@ import Foundation
 
 
 final class SearchDetailViewModel {
+    //MARK: Properties
     weak var delegate: SearchDetailRequestProtocol?
     private var state: ViewState {
         didSet {
@@ -17,10 +18,12 @@ final class SearchDetailViewModel {
     }
     var searchDetail: SearchDetail?
     
+    //MARK: Init
     init() {
         self.state = .idle
     }
     
+    //MARK: Functions
     func getData(_ id: String) {
         self.state = .loading
         let path = Parameters.API_URL + String.init(format: Parameters.API_ENDPOINT_DETAIL, id)

@@ -7,6 +7,7 @@
 
 import Foundation
 
+///View Model ile View arasında durum yönetimi kolaylaştırmak için yazıldı.
 enum ViewState {
     case idle
     case loading

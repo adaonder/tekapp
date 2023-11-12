@@ -8,7 +8,11 @@
 import Foundation
 import UIKit
 
+//Genel amaçlı ViewController için gerekli functionslar yazıldı.
 extension UIViewController {
+    
+    //MARK: Keyboard
+    //For turn off the keyboard
     func hideKeyboardWhenTappedAround() {
         let tap = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
         tap.cancelsTouchesInView = false

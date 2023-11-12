@@ -8,16 +8,18 @@
 import UIKit
 
 
-class SearchCollectionViewCell: UICollectionViewCell {
-    public static var reuseIdentifier = "SearchCollectionViewCell"
+final class SearchCollectionViewCell: UICollectionViewCell {
+    //MARK: Properties
+    static var reuseIdentifier = "SearchCollectionViewCell"
     
-    private let searchPoster : UIImageView = {
+    lazy private var searchPoster : UIImageView = {
         let imgView = UIImageView()
         imgView.contentMode = .scaleAspectFit
         imgView.clipsToBounds = true
         return imgView
     }()
     
+    //MARK: Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .black
@@ -35,6 +37,7 @@ class SearchCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    //MARK: Functions
     override func prepareForReuse() {
         super.prepareForReuse()
         searchPoster.image = nil

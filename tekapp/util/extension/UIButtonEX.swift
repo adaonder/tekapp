@@ -8,9 +8,10 @@
 import Foundation
 import UIKit
 
-
+///Written for quick customization of Button
 extension UIButton {
     
+    //MARK: Color
     func setImageTintColor(_ color: UIColor) {
         let tintedImage = self.imageView?.image?.withRenderingMode(.alwaysTemplate)
         self.setImage(tintedImage, for: .normal)
