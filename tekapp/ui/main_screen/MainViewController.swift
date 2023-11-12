@@ -231,9 +231,9 @@ extension MainViewController: UITableViewDataSourcePrefetching {
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         
         for indexPath in indexPaths {
-            let viewModel = self.searchViewModel.tableViewList[indexPath.row]
-            if let poster = viewModel.search.Poster {
-                viewModel.downloadImage(url: poster, completion: nil)
+            let search = self.searchViewModel.tableViewList[indexPath.row]
+            if let poster = search.Poster, let posterUrl = NSURL(string: poster) {
+                ImageCacheUtil.shared.load(url: posterUrl) {image in}
             }
         }
     }

@@ -43,11 +43,11 @@ final class SearchCollectionViewCell: UICollectionViewCell {
         searchPoster.image = nil
     }
     
-    func setCell(_ viewModel : SearchCellViewModel) {
-        if let poster = viewModel.search.Poster {
-            viewModel.downloadImage(url: poster) { [weak self] image in
+    func setCell(_ search : Search) {
+        if let poster = search.Poster, let posterUrl = NSURL(string: poster) {
+            ImageCacheUtil.shared.load(url: posterUrl) { image in
                 DispatchQueue.main.async {
-                    self?.searchPoster.image = image
+                    self.searchPoster.image = image
                 }
             }
         } else {

@@ -10,7 +10,7 @@ import UIKit
 
 final class MainDetailViewController: BaseViewController {
     //MARK: Properties
-    private var searchCellViewModel: SearchCellViewModel!
+    private var search: Search!
     
     lazy var searchDetailViewModel: SearchDetailViewModel = {
         return SearchDetailViewModel()
@@ -41,9 +41,9 @@ final class MainDetailViewController: BaseViewController {
     }()
     
     //MARK: Functions
-    static func newIntance (_ searchCellViewModel: SearchCellViewModel) -> MainDetailViewController {
+    static func newIntance (_ search: Search) -> MainDetailViewController {
         let vc = MainDetailViewController()
-        vc.searchCellViewModel = searchCellViewModel
+        vc.search = search
         vc.modalPresentationStyle = .fullScreen
         return vc
     }
@@ -56,7 +56,7 @@ final class MainDetailViewController: BaseViewController {
     }
     
     override func initData() {
-        if let id = searchCellViewModel.search.imdbID {
+        if let id = search.imdbID {
             searchDetailViewModel.getData(id)
         }
     }
@@ -98,16 +98,16 @@ final class MainDetailViewController: BaseViewController {
     }
     
     private func updateUI() {
-        if let poster = searchCellViewModel.search.Poster {
-            self.searchCellViewModel.downloadImage(url: poster) { [weak self] image in
+        if let poster = search.Poster, let posterUrl = NSURL(string: poster) {
+            ImageCacheUtil.shared.load(url: posterUrl) { image in
                 DispatchQueue.main.async {
-                    self?.searchPoster.image = image
+                    self.searchPoster.image = image
                 }
             }
         } else {
             searchPoster.image = UIImage(named: Images.shared.avatar)
         }
-        searchTitle.text = searchCellViewModel.search.Title ?? "-"
+        searchTitle.text = search.Title ?? "-"
     }
     
     private func updateUIDetailText() {

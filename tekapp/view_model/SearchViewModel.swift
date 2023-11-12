@@ -30,8 +30,8 @@ final class SearchViewModel {
     private var defaultSearchText = "Star"
     private let defaultSearchCollectionText = "Comedy"
     private var oldRequestPath : String? = nil
-    var tableViewList = [SearchCellViewModel]()
-    var collectionViewList = [SearchCellViewModel]()
+    var tableViewList = [Search]()
+    var collectionViewList = [Search]()
     var tableViewPage:Int = 1
     var collectionPage:Int = 1
     var tableViewTotalResults:Int = 0
@@ -105,9 +105,7 @@ final class SearchViewModel {
         ApiService.shared.makeRequest(path: path) { (result: ApiResponse<[Search]>) in
             self.oldRequestPath = nil
             if let list = result.Search, result.Response == Parameters.responseSuccess {
-                self.tableViewList.append(contentsOf: list.map({ search in
-                    SearchCellViewModel(search)
-                }))
+                self.tableViewList.append(contentsOf: list)
                 self.tableViewTotalResults = Int(result.totalResults!) ?? 0
                 success(list)
             } else {
@@ -141,9 +139,7 @@ final class SearchViewModel {
         ApiService.shared.makeRequest(path: path) { (result: ApiResponse<[Search]>) in
             
             if let list = result.Search, result.Response == Parameters.responseSuccess {
-                self.collectionViewList.append(contentsOf: list.map({ search in
-                    SearchCellViewModel(search)
-                }))
+                self.collectionViewList.append(contentsOf: list)
                 self.collectionTotalResults = Int(result.totalResults!) ?? 0
                 success(list)
             } else {

@@ -45,15 +45,9 @@ final public class ApiService {
         }.resume()
     }
     
-    public func makeRequestImage(url: String, completion: ((Data) -> Void)?) {
-        guard let url = URL(string: url) else {
-            return
-        }
-        
-        URLSession.shared.dataTask(with: url) { (data, response, error) in
-            
-            guard let imageData = data else { return }
-            completion?(imageData)
+    public func makeRequestImage(url: NSURL, completion: ((Data?, Error?) -> Void)?) {
+        URLSession.shared.dataTask(with: url as URL) { (data, response, error) in
+            completion?(data, error)
         }.resume()
     }
     
